@@ -1,0 +1,178 @@
+---
+title: "GenomicRanges behaviour to mimic"
+author: "Peter Hickey"
+date: "24 August 2014"
+output: html_document
+---
+
+For each of these files I need to replicate the relevant functionality in `GenomicTuples`.
+
+An `[x]` means that I have at least setup the relevant section in the `.R` and, if required, the `.Rd` file.
+
+# GTuplesTree
+
+__I don't yet the analogy of a `GIntervalsTree` for a set of tuples. So, for now I don't implement anything but rely on general matching algorithms.__
+
+## GIntervalTree-class.R
+
+# GTuples
+
+## GenomicRanges-class.R
+
+* [x] Class definition
+* [x] Getters
+* [x] Extra column slots
+    + I use these for `internalPos`.
+* [x] Out of bound ranges 
+    + Not required
+* [x] Validity
+* [x] Coercion
+* [x] Setters
+* [x] Updating and cloning
+* [x] Ranges methods
+    + Not required. Would be Tuples methods but tuples and tuples<- are already defined in getters and setters, respectively.
+* [x] Subsetting
+* [x] $ and $<- methods
+* [x] Combining
+* [x] Show
+
+## GRanges-class.R
+
+* [x] Class definition
+* [x] Validity
+* [x] Constructor
+* [x] Coercion
+* [x] Slot getters and setters
+
+# GTuplesList
+
+An `[x]` means that I have at least setup the relevant section in the `GTuples-class.R` file.
+
+## GenomicRangesList-class.R
+
+* [x] Class definition
+* [x] Constructor
+* [x] Coercion
+* [x] Utilities
+
+## GRangesList-class.R
+
+* [x] Class definition
+* [x] Validity
+* [x] Constructors
+* [x] Accessors
+* [x] Coercion
+* [x] Subsetting
+* [x] Going from GRanges to GRangesList with extractList() and family.
+* [x] Show
+* [x] Deconstruction/reconstruction of a GTuplesList into/from a GTuples object.
+
+# Comparison of GTuples
+
+## GenomicRanges-comparison.R
+
+* [x] Description of tuple comparison
+* [x] Compare
+* [x] Duplicated
+* [x] Match
+* [x] Order and related methods
+
+# Coverage
+
+## coverage-methods.R
+
+* [x] Method definition
+
+# findOverlaps-based methods
+
+## findOverlaps-GIntervalTree-methods.R
+
+* [x] Method definition
+
+## findOverlaps-methods.R
+
+* [x] findOverlaps
+* [ ] countOverlaps
+* [ ] overlapsAny
+* [ ] subsetByOverlaps
+
+# Inter-tuple comparisons
+
+__TODO: I need to decide what inter-tuple comparisons make sense.__
+
+## inter-range-methods.R 
+
+* [x] range 
+* [x] reduce
+* [x] gaps
+* [x] disjoint
+* [x] isDisjoint
+* [x] disjiontBins
+
+# Intra-tuples comparisons
+
+__TODO: I need to decide what intra-tuple comparisons make sense.__
+
+## intra-range-methods.R
+
+* [x] shift
+* [x] narrow
+* [x] flank
+* [x] promoters
+* [x] reflect
+* [x] resize
+* [x] restrict
+* [x] trim
+* [x] Zooming (symmetrically scales the width).
+
+## mapCoords-methods.R
+
+* [x] Method definition (disallow it as a method for GTUples)
+
+## nearest-methods.R
+
+__TODO: Documentation__
+
+* [ ] Method definition
+* [ ] precede and follow
+* [ ] nearest
+* [ ] distance
+* [ ] distanceToNearest
+* [ ]
+
+# The rest (nothing todo)
+
+## RangedData-methods.R
+
+Nothing todo.
+
+## SummarizedExperiment-class.R
+
+Nothing todo.
+
+## SummarizedExperiment-rowData-methods.R
+
+Nothing todo.
+
+## constraint.R
+
+Nothing todo.
+
+## deprecated.R
+
+Nothing todo.
+
+## makeGRangesFromDataFrame.R
+
+Nothing todo. Already very easy to create a `GTuples` object from a 
+`data.frame` or a `DataFrame`, so I have no need for this for now. See [this dicussion](https://stat.ethz.ch/pipermail/bioc-devel/2013-October/004777.html) for reasons given for the `makeGRangesFromDataFrame` convenience function. Those 
+same reasons don't yet exist for `GTuples` but if they do I'll happily add a `makeGTuplesFromDataFrame` function.
+
+## makeSeqnameIds.R
+
+Nothing todo.
+
+# Credits
+
+What is the appropriate way to credit the authors of classes, methods and 
+functions in the `GenomicRanges` that I extend, often in a very minor way.

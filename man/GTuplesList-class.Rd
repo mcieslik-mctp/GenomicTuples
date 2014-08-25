@@ -1,0 +1,380 @@
+\name{GTuplesList-class}
+\docType{class}
+
+% Class
+\alias{class:GTuplesList}
+\alias{GTuplesList-class}
+\alias{GTuplesList}
+
+% Constructors:
+\alias{GTuplesList}
+% TODO: Document if updateObject is defined
+\alias{updateObject,GTuplesList-method}
+
+% TODO: Decide whether setters (<-) should be allowed or just getters
+% Accessor methods:
+\alias{seqnames,GTuplesList-method}
+\alias{seqnames<-,GTuplesList-method}
+% Use of ranges methods is documented but strongly discouraged, so I "hide" the 
+% documentation
+%\alias{ranges,GTuplesList-method}
+%\alias{ranges<-,GTuplesList-method}
+\alias{tuples,GTuplesList-method}
+\alias{tuples<-,GTuplesList-method}
+\alias{start,GTuplesList-method}
+%\alias{start<-,GTuplesList-method}
+\alias{end,GTuplesList-method}
+%\alias{end<-,GTuplesList-method}
+\alias{width,GTuplesList-method}
+%\alias{width<-,GTuplesList-method}
+\alias{strand,GTuplesList-method}
+%\alias{strand<-,GTuplesList,ANY-method}
+%\alias{strand<-,GTuplesList,character-method}
+\alias{elementMetadata,GTuplesList-method}
+\alias{elementMetadata<-,GTuplesList-method}
+\alias{seqinfo,GTuplesList-method}
+\alias{seqinfo<-,GTuplesList-method}
+\alias{score,GTuplesList-method}
+\alias{score<-,GTuplesList-method}
+
+% Coercion:
+% TODO: No coercion methods currently defined
+%\alias{coerce,GTuplesList,CompressedIRangesList-method}
+%\alias{coerce,GTuplesList,IRangesList-method}
+%\alias{coerce,GTuplesList,RangesList-method}
+%\alias{coerce,RangedDataList,GTuplesList-method}
+
+% Subsetting:
+\alias{[,GTuplesList,ANY-method}
+\alias{[<-,GTuplesList,ANY,ANY,ANY-method}
+\alias{[[<-,GTuplesList,ANY,ANY,ANY-method}
+
+% extractList() and family:
+\alias{relistToClass,GRanges-method}
+\alias{splitAsListReturnedClass,GRanges-method}
+
+% show method:
+\alias{show,GTuplesList-method}
+
+\title{GTuplesList objects}
+
+\description{
+  The GTuplesList class is a container for storing a collection of
+  GTuples objects. It is derived from GRangesList.
+}
+
+\section{Constructor}{
+  \describe{
+    \item{}{
+      \code{GTuplesList(...)}:
+      Creates a GTuplesList object using GTuples objects
+      supplied in \code{\ldots}.
+    }
+  }
+}
+
+\section{Accessors}{
+  In the following code snippets, \code{x} is a GTuples object.
+  
+  \describe{
+    \item{}{
+      \code{length(x)}:
+      Get the number of list elements.
+    }
+    \item{}{
+      \code{names(x)}, \code{names(x) <- value}:
+      Get or set the names on \code{x}.
+    }
+    \item{}{
+      \code{elementLengths(x)}:
+      Get the \code{length} of each of the list elements.
+    }
+    \item{}{
+    % TODO: Check this works as intended
+      \code{isEmpty(x)}:
+      Returns a logical indicating either if the GTuplesList has no
+      elements or if all its elements are empty.
+    }
+    \item{}{
+      \code{seqnames(x)}, \code{seqnames(x) <- value}:
+      Get or set the sequence names in the form of an RleList. \code{value}
+      can be an RleList or CharacterList object.
+    }
+    % TODO: tuples,GTuplesList method
+%    \item{}{
+%      \code{ranges(x, use.mcols=FALSE)}, \code{ranges(x) <- value}:
+%      Get or set the ranges in the form of a CompressedIRangesList.
+%      \code{value} can be a RangesList object.
+    }
+    % TODO: Document setters if I decide to add these
+    \item{}{
+      \code{start(x)}}:
+      Get \eqn{pos_{1}}.
+    }
+    \item{}{
+      \code{end(x)}}:
+      Get \eqn{pos_{m}}, where \eqn{m} is the \code{size} of the tuples.
+    }
+    \item{}{
+      \code{width(x)}}:
+      Get \eqn{pos_{m} - pos_{1} + 1}, where \eqn{m} is the \code{size} of 
+      the tuples.
+    }
+    \item{}{
+      \code{strand(x)}, \code{strand(x) <- value}:
+      Get or set the strand in the form of an RleList. \code{value} can be
+      an RleList, CharacterList or single character. \code{value} as a
+      single character converts all ranges in \code{x} to the same
+      \code{value}; for selective strand conversion (i.e., mixed \dQuote{+}
+      and \dQuote{-}) use RleList or CharacterList. 
+    }
+    \item{}{
+      \code{mcols(x, use.names=FALSE)}, \code{mcols(x) <- value}:
+      Get or set the metadata columns.
+      \code{value} can be \code{NULL}, or a data.frame-like object (i.e.
+      \link{DataFrame} or data.frame) holding element-wise metadata.
+    }
+    \item{}{
+       \code{elementMetadata(x)}, \code{elementMetadata(x) <- value},
+       \code{values(x)}, \code{values(x) <- value}:
+       Alternatives to \code{mcols} functions. Their use is discouraged.
+    }
+    \item{}{
+      \code{seqinfo(x)}, \code{seqinfo(x) <- value}:
+      Get or set the information about the underlying sequences.
+      \code{value} must be a \link{Seqinfo} object.
+    }
+    \item{}{
+      \code{seqlevels(x)}, \code{seqlevels(x, force=FALSE) <- value}:
+      Get or set the sequence levels.
+      \code{seqlevels(x)} is equivalent to \code{seqlevels(seqinfo(x))}
+      or to \code{levels(seqnames(x))}, those 2 expressions being
+      guaranteed to return identical character vectors on a GTuplesList
+      object. \code{value} must be a character vector with no NAs.
+      See \code{?\link{seqlevels}} for more information.
+    }
+    \item{}{
+      \code{seqlengths(x)}, \code{seqlengths(x) <- value}:
+      Get or set the sequence lengths.
+      \code{seqlengths(x)} is equivalent to \code{seqlengths(seqinfo(x))}.
+      \code{value} can be a named non-negative integer or numeric vector
+      eventually with NAs.
+    }
+    \item{}{
+      \code{isCircular(x)}, \code{isCircular(x) <- value}:
+      Get or set the circularity flags.
+      \code{isCircular(x)} is equivalent to \code{isCircular(seqinfo(x))}.
+      \code{value} must be a named logical vector eventually with NAs.
+    }
+    \item{}{
+      \code{genome(x)}, \code{genome(x) <- value}:
+      Get or set the genome identifier or assembly name for each sequence.
+      \code{genome(x)} is equivalent to \code{genome(seqinfo(x))}.
+      \code{value} must be a named character vector eventually with NAs.
+    }
+    \item{}{
+      \code{seqlevelsStyle(x)}, \code{seqlevelsStyle(x) <- value}:
+      Get or set the seqname style for \code{x}.
+      See the \link[GenomeInfoDb]{seqlevelsStyle} generic getter and setter
+      in the \pkg{GenomeInfoDb} package for more information.
+    }
+    \item{}{
+      \code{score(x), score(x) <- value}: Get or set the \dQuote{score}
+      metadata column.
+    }
+  }
+}
+
+% TODO: Decide what coercion methods are allowed.
+%\section{Coercion}{
+%  
+%}
+
+\section{Subsetting}{
+  In the following code snippets, \code{x} is a GTuplesList object.
+
+  \describe{
+    \item{}{
+      \code{x[i, j]}, \code{x[i, j] <- value}:
+      Get or set elements \code{i} with optional metadata columns
+      \code{mcols(x)[,j]}, where \code{i} can be missing; an NA-free
+      logical, numeric, or character vector; a 'logical' Rle object, or
+      an AtomicList object.
+    }
+    \item{}{
+      \code{x[[i]]}, \code{x[[i]] <- value}:
+      Get or set element \code{i}, where \code{i} is a numeric or character
+      vector of length 1.
+    }
+    \item{}{
+      \code{x$name}, \code{x$name <- value}:
+      Get or set element \code{name}, where \code{name} is a name or character
+      vector of length 1.
+    }
+    \item{}{
+      \code{head(x, n = 6L)}:
+      If \code{n} is non-negative, returns the first n elements of the
+      GTuplesList object.
+      If \code{n} is negative, returns all but the last \code{abs(n)} elements
+      of the GTuplesList object.
+    }
+    \item{}{
+      \code{rep(x, times, length.out, each)}:
+      Repeats the values in \code{x} through one of the following conventions:
+      \describe{
+        \item{\code{times}}{Vector giving the number of times to repeat each
+          element if of length \code{length(x)}, or to repeat the whole vector
+          if of length 1.}
+        \item{\code{length.out}}{Non-negative integer. The desired length of
+          the output vector.}
+        \item{\code{each}}{Non-negative integer.  Each element of \code{x} is
+          repeated \code{each} times.}
+      }
+    }
+    \item{}{
+      \code{subset(x, subset)}:
+      Returns a new object of the same class as \code{x} made of the subset
+      using logical vector \code{subset}, where missing values are taken as
+      \code{FALSE}.
+    }
+    \item{}{
+      \code{tail(x, n = 6L)}:
+      If \code{n} is non-negative, returns the last n elements of the
+      GTuples object.
+      If \code{n} is negative, returns all but the first \code{abs(n)} elements
+      of the GTuples object.
+    }
+  }
+}
+
+\section{Combining}{
+  In the code snippets below, \code{x} is a GTuplesList object.
+
+  \describe{
+    \item{}{
+      \code{c(x, ...)}:
+      Combines \code{x} and the GTuplesList objects in \code{...}
+      together. Any object in \code{...} must belong to the same class
+      as \code{x}, or to one of its subclasses, or must be \code{NULL}.
+      The result is an object of the same class as \code{x}.
+    }
+    \item{}{
+      \code{append(x, values, after = length(x))}:
+      Inserts the \code{values} into \code{x} at the position given by
+      \code{after}, where \code{x} and \code{values} are of the same
+      class.
+    }
+    \item{}{\code{unlist(x, recursive = TRUE, use.names = TRUE)}:
+      Concatenates the elements of \code{x} into a single GTuples
+      object.
+    }
+  }
+}
+
+\section{Looping}{
+  In the code snippets below, \code{x} is a GTuplesList object.
+
+  \describe{
+    \item{}{
+      \code{endoapply(X, FUN, ...)}:
+      Similar to \code{\link[base]{lapply}}, but performs an endomorphism,
+      i.e. returns an object of \code{class(X)}.
+    }
+    \item{}{
+      \code{lapply(X, FUN, ...)}:
+      Like the standard \code{\link[base]{lapply}} function defined in the
+      base package, the \code{lapply} method for GTuplesList objects
+      returns a list of the same length as \code{X}, with each element being
+      the result of applying \code{FUN} to the corresponding element of
+      \code{X}.
+    }
+    \item{}{
+      \code{Map(f, ...)}:
+      Applies a function to the corresponding elements of given
+      GTuplesList objects.
+    }
+    \item{}{
+      \code{mapply(FUN, ..., MoreArgs = NULL, SIMPLIFY = TRUE, USE.NAMES = TRUE)}:
+      Like the standard \code{\link[base]{mapply}} function defined in the
+      base package, the \code{mapply} method for GTuplesList objects is a
+      multivariate version of \code{sapply}.
+    }
+    \item{}{
+      \code{mendoapply(FUN, ..., MoreArgs = NULL)}:
+      Similar to \code{\link[base]{mapply}}, but performs an endomorphism
+      across multiple objects, i.e. returns an object of
+      \code{class(list(...)[[1]])}.
+    }
+    \item{}{
+      \code{Reduce(f, x, init, right = FALSE, accumulate = FALSE)}:
+      Uses a binary function to successively combine the elements of \code{x}
+      and a possibly given initial value.
+      \describe{
+        \item{f}{A binary argument function.}
+        \item{init}{An R object of the same kind as the elements of \code{x}.}
+        \item{right}{A logical indicating whether to proceed from left to right
+          (default) or from right to left.}
+        \item{nomatch}{The value to be returned in the case when "no match" (no
+          element satisfying the predicate) is found.}
+      }
+    }
+    \item{}{
+      \code{sapply(X, FUN, ..., simplify=TRUE, USE.NAMES=TRUE)}:
+      Like the standard \code{\link[base:lapply]{sapply}} function defined in
+      the base package, the \code{sapply} method for GTuplesList objects
+      is a user-friendly version of \code{lapply} by default returning a vector
+      or matrix if appropriate.
+    }
+  }
+}
+
+\author{Peter Hickey}
+
+% TODO: Add any relevant classes/methods from GenomicTuples
+\seealso{
+  \link{GTuples-class}
+  \code{\link[GenomeInfoDb]{seqinfo}},
+  \link[GenomicRanges]{GRangesList-class},
+  \link[S4Vectors]{Vector-class},
+  \link[IRanges]{RangesList-class},
+  \link[IRanges]{RleList-class},
+  \link[IRanges]{DataFrameList-class},
+  %\link[GenomicRanges]{intra-range-methods},
+  %\link[GenomicRanges]{inter-range-methods},
+  \link{setops-methods},
+  \link{findOverlaps-methods}
+}
+
+% TODO: Check these work as intended
+% TODO: Add example of coercing to a DataFrameList, if I decide to add this 
+% method
+\examples{
+## Construction with GTuplesList():
+gt1a <-
+  GTuples(seqnames = "chr2", ranges = matrix(c(3L, 6L), ncol = 1),
+          strand = "+", score = c(5L, 10L), GC = c(0.45, 0.55))
+gt1b <-
+  GTuples(seqnames = c("chr1", "chr1"),
+          ranges = matrix(c(7L, 13L), ncol = 1),
+          strand = c("+", "-"), score = 3:4, GC = c(0.3, 0.5))
+gt1c <-
+  GTuples(seqnames = c("chr1", "chr2"),
+          ranges = matrix(c(1L, 4L), ncol = 1),
+          strand = c("-", "-"), score = c(6L, 2L), GC = c(0.4, 0.1))
+gtl <- GTuplesList("gt1a" = gt1a, "gt1b" = gt1b, "gt1c" = gt1c)
+gtl
+
+## Summarizing elements:
+elementLengths(gtl)
+table(seqnames(gtl))
+
+## Extracting subsets:
+gtl[seqnames(gtl) == "chr1", ]
+gtl[seqnames(gtl) == "chr1" & strand(gtl) == "+", ]
+
+## Renaming the underlying sequences:
+seqlevels(gtl)
+seqlevels(gtl) <- sub("chr", "Chrom", seqlevels(gtl))
+gtl
+
+}
