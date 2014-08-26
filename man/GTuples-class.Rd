@@ -78,7 +78,7 @@
   \item{\code{seqnames}}{a 'factor' \code{\link[S4Vectors]{Rle}} object
    containing the sequence names.}
 
-  \item{\code{\code{tuples}}}{externally, a matrix-link object containing the
+  \item{\code{tuples}}{externally, a matrix-link object containing the
   tuples. Internally, an \code{\link[IRanges]{IRanges}} object storing the
   first and last position of each tuple and, if required, a matrix storing
   the "internal" positions of each tuple (see description of
@@ -197,7 +197,7 @@
    }
    
    \item{}{
-    \code{tuples(x)}}: Get the positions of the tuples, which are returned as 
+    \code{tuples(x)}: Get the positions of the tuples, which are returned as 
     an integer matrix.
    }
 

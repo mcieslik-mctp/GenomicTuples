@@ -27,7 +27,7 @@
 %\alias{restrict,GenomicRanges-method}
 %\alias{restrict,GRangesList-method}
 
-\alias{trim,GenomicRanges-method}
+\alias{trim,GTuples-method}
 
 %\alias{Ops,GenomicRanges,numeric-method}
 
@@ -93,6 +93,7 @@ use.names = TRUE)
     }
     \item{}{\code{trim} trims out-of-bound ranges located on non-circular
       sequences whose length is not NA.
+    }
   }
 }
 

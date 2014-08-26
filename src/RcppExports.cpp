@@ -22,23 +22,6 @@ BEGIN_RCPP
     return __sexp_result;
 END_RCPP
 }
-// candidateDuplicateGTuples
-LogicalVector candidateDuplicateGTuples(IntegerVector int_seqnames, IntegerVector int_strand, IntegerMatrix int_pos);
-RcppExport SEXP GenomicTuples_candidateDuplicateGTuples(SEXP int_seqnamesSEXP, SEXP int_strandSEXP, SEXP int_posSEXP) {
-BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::RNGScope __rngScope;
-        Rcpp::traits::input_parameter< IntegerVector >::type int_seqnames(int_seqnamesSEXP );
-        Rcpp::traits::input_parameter< IntegerVector >::type int_strand(int_strandSEXP );
-        Rcpp::traits::input_parameter< IntegerMatrix >::type int_pos(int_posSEXP );
-        LogicalVector __result = candidateDuplicateGTuples(int_seqnames, int_strand, int_pos);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
-END_RCPP
-}
 // compareGTuplesCpp
 IntegerVector compareGTuplesCpp(IntegerVector int_seqnames, IntegerVector int_strand, IntegerMatrix int_pos);
 RcppExport SEXP GenomicTuples_compareGTuplesCpp(SEXP int_seqnamesSEXP, SEXP int_strandSEXP, SEXP int_posSEXP) {
@@ -67,23 +50,6 @@ BEGIN_RCPP
         Rcpp::traits::input_parameter< IntegerMatrix >::type internal_pos(internal_posSEXP );
         Rcpp::traits::input_parameter< IntegerVector >::type posm(posmSEXP );
         IntegerMatrix __result = IPD(pos1, internal_pos, posm);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
-END_RCPP
-}
-// tmp
-LogicalVector tmp(IntegerVector int_seqnames, IntegerVector int_strand, IntegerMatrix int_pos);
-RcppExport SEXP GenomicTuples_tmp(SEXP int_seqnamesSEXP, SEXP int_strandSEXP, SEXP int_posSEXP) {
-BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::RNGScope __rngScope;
-        Rcpp::traits::input_parameter< IntegerVector >::type int_seqnames(int_seqnamesSEXP );
-        Rcpp::traits::input_parameter< IntegerVector >::type int_strand(int_strandSEXP );
-        Rcpp::traits::input_parameter< IntegerMatrix >::type int_pos(int_posSEXP );
-        LogicalVector __result = tmp(int_seqnames, int_strand, int_pos);
         PROTECT(__sexp_result = Rcpp::wrap(__result));
     }
     UNPROTECT(1);

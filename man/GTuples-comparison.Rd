@@ -4,6 +4,9 @@
 
 \alias{compare,GTuples,GTuples-method}
 
+\alias{==,GTuples,GTuples-method}
+\alias{<=,GTuples,GTuples-method}
+
 \alias{duplicated,GTuples-method}
 \alias{duplicated.GTuples}
 
@@ -135,141 +138,6 @@
 }
 
 \examples{
-% TODO: Check all examples work as intended
-## Example 1-tuples
-gt1a <- GTuples(seqnames = Rle(c("chr1", "chr2", "chr1", "chr3"), c(1, 3, 2, 4)),
-               tuples = matrix(c(1:9, 7L), ncol = 1),
-               strand = Rle(strand(c("-", "+", "*", "+", "-")), c(1, 2, 2, 3, 2)),
-               seqlengths=c(chr1 = 110, chr2 = 120, chr3 = 130))
-gt1 <- c(gt1a, gt1a[7:3])
-
-## Example 2-tuples
-gt2a <- GTuples(seqnames = Rle(c("chr1", "chr2", "chr1", "chr3"), c(1, 3, 2, 4)),
-               tuples = matrix(c(1:9, 7L, 11:19, 17L), ncol = 2),
-               strand = Rle(strand(c("-", "+", "*", "+", "-")), c(1, 2, 2, 3, 2)),
-               seqlengths=c(chr1 = 110, chr2 = 120, chr3 = 130))
-gt2 <- c(gt2a, gt2a[7:3])
-
-## Example 3-tuples
-gt3a <- GTuples(seqnames = Rle(c("chr1", "chr2", "chr1", "chr3"), c(1, 3, 2, 4)),
-               tuples = matrix(c(1:9, 7L, 11:19, 17L, 21:29, 27L), ncol = 3),
-               strand = Rle(strand(c("-", "+", "*", "+", "-")), c(1, 2, 2, 3, 2)),
-               seqlengths=c(chr1 = 110, chr2 = 120, chr3 = 130))
-gt3 <- c(gt3a, gt3a[7:3])
-
-
-## ---------------------------------------------------------------------
-## A. ELEMENT-WISE (AKA "PARALLEL") COMPARISON OF 2 GTuples OBJECTS
-## ---------------------------------------------------------------------
-gt1[2] == gt1[2]  # TRUE
-gt2[2] == gt2[2]  # TRUE
-gt3[2] == gt3[2]  # TRUE
-
-gt1[2] == gt1[5]  # FALSE
-gt2[2] == gt2[5]  # FALSE
-gt3[2] == gt3[5]  # FALSE
-
-gt1 == gt1[4]
-gt2 == gt2[4]
-gt3 == gt3[4]
-
-gt1 >= gt1[3]
-gt2 >= gt2[3]
-gt3 >= gt3[3]
-
-## ---------------------------------------------------------------------
-## B. duplicated(), unique()
-## ---------------------------------------------------------------------
-duplicated(gt1)
-duplicated(gt2)
-duplicated(gt3)
-
-unique(gt1)
-unique(gt2)
-unique(gt3)
-
-## ---------------------------------------------------------------------
-## C. match(), %in%
-## ---------------------------------------------------------------------
-table1 <- gt1[1:7]
-table2 <- gt2[1:7]
-table3 <- gt3[1:7]
-
-match(gt1, table1)
-match(gt2, table2)
-match(gt3, table3)
-
-match(gt1, table1, ignore.strand = TRUE)
-match(gt2, table2, ignore.strand = TRUE)
-match(gt3, table3, ignore.strand = TRUE)
-
-gt1 \%in\% table1
-gt2 \%in\% table2
-gt3 \%in\% table3
-
-## ---------------------------------------------------------------------
-## D. findMatches(), countMatches()
-## ---------------------------------------------------------------------
-findMatches(gt1, table1)
-findMatches(gt2, table2)
-findMatches(gt3, table3)
-
-countMatches(gt1, table1)
-countMatches(gt2, table2)
-countMatches(gt3, table3)
-
-findMatches(gt1, table1, ignore.strand = TRUE)
-findMatches(gt2, table2, ignore.strand = TRUE)
-findMatches(gt3, table3, ignore.strand = TRUE)
-
-countMatches(gt1, table1, ignore.strand = TRUE)
-countMatches(gt2, table2, ignore.strand = TRUE)
-countMatches(gt3, table3, ignore.strand = TRUE)
-
-gt1_levels <- unique(gt1)
-gt2_levels <- unique(gt2)
-gt3_levels <- unique(gt3)
-
-countMatches(gt1_levels, gt1)
-countMatches(gt2_levels, gt2)
-countMatches(gt3_levels, gt3)
-
-## ---------------------------------------------------------------------
-## E. order() AND RELATED METHODS
-## ---------------------------------------------------------------------
-order(gt1)
-order(gt2)
-order(gt3)
-
-sort(gt1)
-sort(gt2)
-sort(gt3)
-
-sort(gt1, ignore.strand = TRUE)
-sort(gt2, ignore.strand = TRUE)
-sort(gt3, ignore.strand = TRUE)
-
-% by is not yet implemented for GTuples
-%## TODO: Broken. Please fix!
-%#sort(gr, by = ~ seqnames + start + end) # equivalent to (but slower than) above
-%score(gr) <- rev(seq_len(length(gr)))
-%## TODO: Broken. Please fix!
-%#sort(gr, by = ~ score)
-
-rank(gt1)
-rank(gt2)
-rank(gt3)
-
-## ---------------------------------------------------------------------
-## F. GENERALIZED ELEMENT-WISE COMPARISON OF 2 GTuples OBJECTS
-## ---------------------------------------------------------------------
-% TODO
-%gr2 <- GTuples(c(rep("chr1", 12), "chr2"), IRanges(c(1:11, 6:7), width=3))
-%strand(gr2)[12] <- "+"
-%gr3 <- GTuples("chr1", IRanges(5, 9))
-
-%compare(gr2, gr3)
-%rangeComparisonCodeToLetter(compare(gr2, gr3))
-%}
-
+## TODO
+}
 \keyword{methods}

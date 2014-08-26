@@ -27,24 +27,23 @@ INVALID.GT.COLNAMES <- c("seqnames", "ranges", "strand",
                          #"genome",
                          "start", "end", "width", "element",
                          "tuples", "internalPos", "size")
-.valid.GTuplesList.mcols <- function(x)
-{
+.valid.GTuplesList.mcols <- function(object) {
   msg <- NULL
-  x_mcols <- x@elementMetadata
-  if (nrow(x_mcols) != length(x))
-    msg <- "'mcols(x)' has an incorrect number of rows"
+  object_mcols <- object@elementMetadata
+  if (nrow(object_mcols) != length(object)) {
+    msg <- "'mcols(object)' has an incorrect number of rows"
+  }
   if (any(INVALID.GT.COLNAMES %in% colnames(mcols(object)))) {
     msg <- c("names of metadata columns cannot be one of ",
              paste0("\"", INVALID.GT.COLNAMES, "\"", collapse=", "))
   }
-  if (!is.null(rownames(x_mcols))){
-    msg <- c(msg, "'mcols(x)' cannot have row names")
+  if (!is.null(rownames(object_mcols))) {
+    msg <- c(msg, "'mcols(object)' cannot have row names")
   }
   msg
 }
 
-.valid.GTuplesList <- function(x)
-{
+.valid.GTuplesList <- function(x) {
   c(.valid.GTuplesList.mcols(x))
 }
 
@@ -55,8 +54,7 @@ setValidity2("GTuplesList", .valid.GTuplesList)
 ###
 
 #' @export
-GTuplesList <- function(...)
-{
+GTuplesList <- function(...) {
   listData <- list(...)
   if (length(listData) == 0L) {
     unlistData <- GTuples()
@@ -78,18 +76,20 @@ GTuplesList <- function(...)
 
 # TODO: Test
 #' @export
-setMethod("updateObject", "GTuplesList", function(object, ..., verbose = FALSE) 
-  {
-  if (verbose) {
-    message("updateObject(object = 'GTuplesList')")
-  }
-  if (is(try(validObject(object@unlistData, complete=TRUE), 
-             silent=TRUE), "try-error")) {
-    object@unlistData <- updateObject(object@unlistData)
-    return(object)
-  }
-  object
-})
+setMethod("updateObject", 
+          "GTuplesList", 
+          function(object, ..., verbose = FALSE) { 
+            if (verbose) {
+              message("updateObject(object = 'GTuplesList')")
+            }
+            if (is(try(validObject(object@unlistData, complete = TRUE), 
+                       silent=TRUE), "try-error")) {
+              object@unlistData <- updateObject(object@unlistData)
+              return(object)
+            }
+            object
+          }
+)
 
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ### Accessors.
@@ -97,9 +97,12 @@ setMethod("updateObject", "GTuplesList", function(object, ..., verbose = FALSE)
 
 #' @include AllGenerics.R
 #' @export
-setMethod("size", "GTuplesList", function(x) {
-  size(x[[1]])
-})
+setMethod("size", 
+          "GTuplesList", 
+          function(x) {
+            size(x[[1]])
+          }
+)
 
 # TODO: tuples, tuples<-
 
@@ -119,10 +122,13 @@ setMethod("size", "GTuplesList", function(x) {
 
 #' @include AllGenerics.R
 #' @export
-setMethod("IPD", "GTuplesList", function(x) {
-  unlisted_x <- unlist(x, use.names = FALSE)
-  relist(IPD(unlisted_x), x)
-})
+setMethod("IPD", 
+          "GTuplesList", 
+          function(x) {
+            unlisted_x <- unlist(x, use.names = FALSE)
+            relist(IPD(unlisted_x), x)
+          }
+)
 
 # TODO: stack (GenomicRangesList-class.R)
 
@@ -138,9 +144,12 @@ setMethod("IPD", "GTuplesList", function(x) {
 ###
 
 #' @export
-setMethod("relistToClass", "GTuples", function(x) {
-  "GTuplesList"
-})
+setMethod("relistToClass", 
+          "GTuples", 
+          function(x) {
+            "GTuplesList"
+          }
+)
 
 # TODO: splitAsListReturnedClass ?
 
@@ -212,9 +221,12 @@ showList <- function(object, showFunction, with.classinfo, ...) {
   GenomicRanges:::showSeqlengths(object)
 }
 
-setMethod("show", "GTuplesList", function(object) {
-  showList(object, showGTuples, FALSE)
-})
+setMethod("show", 
+          "GTuplesList", 
+          function(object) {
+            showList(object, showGTuples, FALSE)
+          }
+)
 
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ### Deconstruction/reconstruction of a GTuplesList into/from a GTuples

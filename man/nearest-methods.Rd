@@ -28,27 +28,27 @@
 }
 
 \usage{
-\S4method{precede}{GTuples, GTuples}(x, subject, select = c("arbitrary", "all"), 
+\S4method{precede}{GTuples,GTuples}(x, subject, select = c("arbitrary", "all"), 
         ignore.strand = FALSE, ...)
-\S4method{precede}{GTuples, missing}(x, subject, select = c("arbitrary", "all"), 
+\S4method{precede}{GTuples,missing}(x, subject, select = c("arbitrary", "all"), 
         ignore.strand = FALSE, ...)
 
-\S4method{follow}{GTuples, GTuples}(x, subject, select = c("arbitrary", "all"), 
+\S4method{follow}{GTuples,GTuples}(x, subject, select = c("arbitrary", "all"), 
        ignore.strand=FALSE, ...)
-\S4method{follow}{GTuples, missing}(x, subject, select = c("arbitrary", "all"), 
+\S4method{follow}{GTuples,missing}(x, subject, select = c("arbitrary", "all"), 
        ignore.strand = FALSE, ...)
 
-\S4method{nearest}{GTuples, GTuples}(x, subject, select = c("arbitrary", "all"), 
+\S4method{nearest}{GTuples,GTuples}(x, subject, select = c("arbitrary", "all"), 
         ignore.strand = FALSE, ...)
-\S4method{nearest}{GTuples, missing}(x, subject, select = c("arbitrary", "all"), 
+\S4method{nearest}{GTuples,missing}(x, subject, select = c("arbitrary", "all"), 
         ignore.strand = FALSE, ...)
 
-\S4method{distanceToNearest}{GTuples, GTuples}(x, subject, ignore.strand = FALSE, 
+\S4method{distanceToNearest}{GTuples,GTuples}(x, subject, ignore.strand = FALSE, 
                   ...)
-\S4method{distanceToNearest}{GTuples, missing}(x, subject, ignore.strand = FALSE, 
+\S4method{distanceToNearest}{GTuples,missing}(x, subject, ignore.strand = FALSE, 
                   ...)
 
-\S4method{distance}{GTuples, GTuples}(x, y, ignore.strand = FALSE, ...)
+\S4method{distance}{GTuples,GTuples}(x, y, ignore.strand = FALSE, ...)
 }
 
 \arguments{

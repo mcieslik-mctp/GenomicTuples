@@ -64,7 +64,7 @@
 \description{
   The \code{GTuplesList} class is a container for storing a collection of
   \code{\link{GTuples}} objects. It is derived from 
-  \code{\link[GenomicRanges]{GRangesList}.
+  \code{\link[GenomicRanges]{GRangesList}}.
 }
 
 \section{Constructor}{
@@ -112,7 +112,7 @@
 %      \code{ranges(x, use.mcols=FALSE)}, \code{ranges(x) <- value}:
 %      Get or set the ranges in the form of a CompressedIRangesList.
 %      \code{value} can be a RangesList object.
-    }
+%    }
     \item{}{
       \code{ranges(x)}, \code{ranges(x) <- value}: Get or set the ranges in the 
       form of a \code{\link[IRanges]{CompressedIRangesList}}. \code{value} can
@@ -402,32 +402,5 @@ class and methods.}
 % TODO: Add example of coercing to a DataFrameList, if I decide to add this 
 % method
 \examples{
-## Construction with GTuplesList():
-gt1a <-
-  GTuples(seqnames = "chr2", ranges = matrix(c(3L, 6L), ncol = 1),
-          strand = "+", score = c(5L, 10L), GC = c(0.45, 0.55))
-gt1b <-
-  GTuples(seqnames = c("chr1", "chr1"),
-          ranges = matrix(c(7L, 13L), ncol = 1),
-          strand = c("+", "-"), score = 3:4, GC = c(0.3, 0.5))
-gt1c <-
-  GTuples(seqnames = c("chr1", "chr2"),
-          ranges = matrix(c(1L, 4L), ncol = 1),
-          strand = c("-", "-"), score = c(6L, 2L), GC = c(0.4, 0.1))
-gtl <- GTuplesList("gt1a" = gt1a, "gt1b" = gt1b, "gt1c" = gt1c)
-gtl
-
-## Summarizing elements:
-elementLengths(gtl)
-table(seqnames(gtl))
-
-## Extracting subsets:
-gtl[seqnames(gtl) == "chr1", ]
-gtl[seqnames(gtl) == "chr1" & strand(gtl) == "+", ]
-
-## Renaming the underlying sequences:
-seqlevels(gtl)
-seqlevels(gtl) <- sub("chr", "Chrom", seqlevels(gtl))
-gtl
-
+## TODO
 }

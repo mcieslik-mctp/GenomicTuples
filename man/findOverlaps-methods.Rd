@@ -114,23 +114,23 @@
 }
 
 \usage{
-\S4method{findOverlaps}{GTuples, GTuples}(query, subject,
+\S4method{findOverlaps}{GTuples,GTuples}(query, subject,
     maxgap = 0L, minoverlap = 1L,
     type = c("any", "start", "end", "within", "equal"),
     select = c("all", "first", "last", "arbitrary"),
     ignore.strand = FALSE)
 
-\S4method{countOverlaps}{GTuples, GTuples}(query, subject,
+\S4method{countOverlaps}{GTuples,GTuples}(query, subject,
     maxgap = 0L, minoverlap = 1L,
     type = c("any", "start", "end", "within", "equal"), 
     ignore.strand = FALSE)
 
-\S4method{overlapsAny}{GTuples, GTuples}(query, subject,
+\S4method{overlapsAny}{GTuples,GTuples}(query, subject,
     maxgap = 0L, minoverlap = 1L,
     type = c("any", "start", "end", "within", "equal"), 
     ignore.strand = FALSE)
 
-\S4method{subsetByOverlaps}{GTuples, GTuples}(query, subject,
+\S4method{subsetByOverlaps}{GTuples,GTuples}(query, subject,
     maxgap = 0L, minoverlap = 1L,
     type = c("any", "start", "end", "within", "equal"),
     ignore.strand = FALSE)
@@ -170,15 +170,16 @@
     \item{Equal tuple-tuple overlaps}{
       When the \code{query} and the \code{subject} are \code{\link{GTuples}} 
       objects and \code{type = "equal"}, \code{findOverlaps} uses 
-      the seqnames (\code{\link{seqnames}}), positions (\code{\link{tuples}})
-      and strand (\code{\link{strand}}) to determine which tuples from the 
-      \code{query} exactly match those in the \code{subject}, where a 
-      \code{strand} value of \code{"*"} is treated as occuring on both the 
-      \code{"+"} and \code{"-"} strand. An overlap is recorded when a tuple in 
-      the \code{query} and a tuple in the \code{subject} have the same sequence 
-      name, have a compatible pairing of strands (e.g. \code{"+"}/\code{"+"}, 
-      \code{"-"}/\code{"-"}, \code{"*"}/\code{"+"}, \code{"*"}/\code{"-"}, 
-      etc.), and have identical positions.
+      the seqnames (\code{\link{seqnames}}), positions 
+      (\code{\link{tuples,GTuples-method}}) and strand (\code{\link{strand}}) 
+      to determine which tuples from the \code{query} exactly match those in 
+      the \code{subject}, where a \code{strand} value of \code{"*"} is treated 
+      as occuring on both the \code{"+"} and \code{"-"} strand. An overlap is 
+      recorded when a tuple in the \code{query} and a tuple in the
+      \code{subject} have the same sequence name, have a compatible pairing of 
+      strands (e.g. \code{"+"}/\code{"+"}, \code{"-"}/\code{"-"}, 
+      \code{"*"}/\code{"+"}, \code{"*"}/\code{"-"}, etc.), and have 
+      identical positions.
       
       \strong{NOTE}: Can only find equal tuple-tuple overlaps when 
       \code{size(query)} is the same as \code{size(subject)}.
@@ -277,6 +278,7 @@ underlying the powerful \code{findOverlaps} functionality.}
 
 \examples{
 ## TODO:
+}
 
 \keyword{methods}
 \keyword{utilities}
