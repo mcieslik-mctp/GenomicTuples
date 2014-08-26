@@ -24,7 +24,7 @@
 
 \usage{
 ## Element-wise (aka "parallel") comparison of 2 GTuples objects
-## -------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 
 \S4method{==}{GTuples,GTuples}(e1, e2)
 
@@ -33,28 +33,28 @@
 ## duplicated()
 ## ------------
 
-\S4method{duplicated}{GTuples}(x, incomparables=FALSE, fromLast=FALSE,
-           method=c("hash", "base"))
+\S4method{duplicated}{GTuples}(x, incomparables = FALSE, fromLast = FALSE,
+           method = c("hash", "base"))
 
 ## match()
 ## -------
 
-\S4method{match}{GTuples,GTuples}(x, table, nomatch=NA_integer_, incomparables=NULL,
-      method=c("auto"), ignore.strand=FALSE)
+\S4method{match}{GTuples,GTuples}(x, table, nomatch=NA_integer_, 
+      incomparables = NULL, method = c("auto"), ignore.strand = FALSE)
 
 ## order() and related methods
-## ----------------------------
+## -----------------------------------------------------------------------------
 
-\S4method{order}{GTuples}(..., na.last=TRUE, decreasing=FALSE)
+\S4method{order}{GTuples}(..., na.last = TRUE, decreasing = FALSE)
 
-\S4method{sort}{GTuples}(x, decreasing=FALSE, ignore.strand=FALSE, by)
+\S4method{sort}{GTuples}(x, decreasing = FALSE, ignore.strand = FALSE, by)
 
-\S4method{rank}{GTuples}(x, na.last=TRUE,
-     ties.method=c("average", "first", "random", "max", "min"))
+\S4method{rank}{GTuples}(x, na.last = TRUE,
+     ties.method = c("average", "first", "random", "max", "min"))
 
 ## Generalized element-wise (aka "parallel") comparison of 2 GTuples
 ## objects
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 
 \S4method{compare}{GTuples,GTuples}(x, y)
 }
@@ -100,7 +100,7 @@
 }
 
 \details{
-  Two elements of a \link{GTuples} object (i.e. two genomic ranges) are
+  Two elements of a \link{GTuples} object (i.e. two genomic tuples) are
   considered equal iff they are on the same underlying sequence and strand,
   and have the same positions. \code{duplicated()} and \code{unique()}
   on a \link{GTuples} object are conforming to this.
@@ -126,11 +126,7 @@
     \item The \link{GTuples} class.
     \item \link[GRanges]{GRanges-comparison} in the \strong{GRanges}
           package for comparing and ordering genomic ranges.
-    % TODO: Should there be intra-tuple and inter-tuple methods?
-    % TODO: Should intra-range and inter-range methods fail for GTuples?
-    %\item \link[GTuples]{intra-range-methods} and
-    %      \link[GTuples]{inter-range-methods} for
-    %      intra and inter range transformations.
+    \item \link{intra-tuple-methods} for intra-tuple transformations.
     \item \link[GTuples]{setops-methods} for set operations on
           \link{GTuples} objects.
     \item \link[GTuples]{findOverlaps-methods} for finding

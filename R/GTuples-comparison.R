@@ -106,19 +106,28 @@
 }
 
 #' @export
-setMethod("compare", c("GTuples", "GTuples"), function(x, y) {
-  .GTuples.compare(x, y)
-})
+setMethod("compare", 
+          c("GTuples", "GTuples"), 
+          function(x, y) {
+            .GTuples.compare(x, y)
+          }
+)
 
 #' @export
-setMethod("<=", c("GTuples", "GTuples"), function(e1, e2) {
-  .GTuples.compare(e1, e2) <= 0L
-})
+setMethod("<=", 
+          c("GTuples", "GTuples"), 
+          function(e1, e2) {
+            .GTuples.compare(e1, e2) <= 0L
+          }
+)
 
 #' @export
-setMethod("==", c("GTuples", "GTuples"), function(e1, e2) {
-  .GTuples.compare(e1, e2) == 0L
-})
+setMethod("==", 
+          c("GTuples", "GTuples"), 
+          function(e1, e2) {
+            .GTuples.compare(e1, e2) == 0L
+          }
+)
 
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ### duplicated()  
@@ -199,7 +208,9 @@ duplicated.GTuples <- function(x, incomparables = FALSE, ...) {
   .duplicated.GTuples(x, incomparables = incomparables, ...)
 }
 #' @export
-setMethod("duplicated", "GTuples", .duplicated.GTuples)
+setMethod("duplicated", 
+          "GTuples", 
+          .duplicated.GTuples)
 
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ### match()
@@ -212,7 +223,8 @@ setMethod("duplicated", "GTuples", .duplicated.GTuples)
 
 ## Loosely based on 'match' method for GenomicRanges objects
 #' @export
-setMethod("match", c("GTuples", "GTuples"), 
+setMethod("match", 
+          c("GTuples", "GTuples"), 
           function(x, table, nomatch = NA_integer_, incomparables = NULL, 
                    ignore.strand = FALSE) {
             
@@ -247,72 +259,79 @@ setMethod("match", c("GTuples", "GTuples"),
 
 # Loosely based on 'order' method for GRanges
 #' @export
-setMethod(order, "GTuples", function(..., na.last = TRUE, decreasing = FALSE) {
-  
-  if (!isTRUEorFALSE(decreasing)){
-    stop("'decreasing' must be TRUE or FALSE")
-  }
-  
-  args <- list(...)
-  
-  size <- sapply(args, size)
-  
-  if (!.zero_range(size)) {
-    stop("All GTuples objects must have the same 'size' value.")
-  } else{
-    size <- size[1]
-  }
-  
-  if (size < 3){
-    # If size < 3 just defer to the order method defined for GRanges
-    # Can't simply use callNextMethod() because (oddly) there is no order 
-    # method defined for GRanges (rather it is defined for GenomicRanges).
-    order(do.call("c", lapply(args, function(x){as(x, "GRanges")})), 
-          na.last = na.last, decreasing = decreasing)
-  } else{
-    # If size >= 3 then need to define an order method that takes note of the 
-    # "internal positions in each tuple.
-    order_args <- vector("list", (size + 2L) * length(args))
-    idx <- (size + 2L) * seq_len(length(args))
-    order_args[seq.int(from = 1, to = max(idx), by = size + 2)] <- 
-      lapply(args, function(x) {
-        as.factor(seqnames(x))
-      })
-    order_args[seq.int(from = 2, to = max(idx), by = size + 2)] <- 
-      lapply(args, function(x) {
-        as.factor(strand(x))
-      })
-    order_args[seq.int(from = 3, to = max(idx), by = size + 2)] <- 
-      lapply(args, start)
-    order_args[seq.int(from = 4, to = max(idx), by = size + 2) + 
-                 rep(seq(0, size - 3, by = 1))] <- lapply(args, function(x) {
-                   x@internalPos
-                 })
-    
-    order_args[idx] <- lapply(args, function(x){end(x)})
-    do.call(order, c(order_args, list(na.last = na.last, 
-                                      decreasing = decreasing)))
-  }
-})
+setMethod(order, 
+          "GTuples", 
+          function(..., na.last = TRUE, decreasing = FALSE) {
+            
+            if (!isTRUEorFALSE(decreasing)){
+              stop("'decreasing' must be TRUE or FALSE")
+            }
+            
+            args <- list(...)
+            
+            size <- sapply(args, size)
+            
+            if (!.zero_range(size)) {
+              stop("All GTuples objects must have the same 'size' value.")
+            } else{
+              size <- size[1]
+            }
+            
+            if (size < 3){
+              # If size < 3 just defer to the order method defined for GRanges
+              # Can't simply use callNextMethod() because (oddly) there is no 
+              # order method defined for GRanges (rather it is defined for 
+              # GenomicRanges).
+              order(do.call("c", lapply(args, function(x){as(x, "GRanges")})), 
+                    na.last = na.last, decreasing = decreasing)
+            } else{
+              # If size >= 3 then need to define an order method that takes 
+              # note of the "internal positions in each tuple.
+              order_args <- vector("list", (size + 2L) * length(args))
+              idx <- (size + 2L) * seq_len(length(args))
+              order_args[seq.int(from = 1, to = max(idx), by = size + 2)] <- 
+                lapply(args, function(x) {
+                  as.factor(seqnames(x))
+                })
+              order_args[seq.int(from = 2, to = max(idx), by = size + 2)] <- 
+                lapply(args, function(x) {
+                  as.factor(strand(x))
+                })
+              order_args[seq.int(from = 3, to = max(idx), by = size + 2)] <- 
+                lapply(args, start)
+              order_args[seq.int(from = 4, to = max(idx), by = size + 2) + 
+                           rep(seq(0, size - 3, by = 1))] <- 
+                lapply(args, function(x) {
+                  x@internalPos
+                  })
+              
+              order_args[idx] <- lapply(args, function(x){end(x)})
+              do.call(order, c(order_args, list(na.last = na.last, 
+                                                decreasing = decreasing)))
+            }
+          }
+)
 
 # TODO: Add support for 'by' argument
 # Loosely based on 'sort' method for GRanges
 #' @export
-setMethod(sort, "GTuples", function(x, decreasing = FALSE, 
-                                    ignore.strand = FALSE, by) {
-  
-  if (!missing(by)) {
-    stop("Sorry, the 'by' argument is not yet supported.")
-  }
-  
-  if (!isTRUEorFALSE(ignore.strand)) {
-    stop("'ignore.strand' must be TRUE or FALSE")
-  }
-  if (ignore.strand) {
-    x2 <- unstrand(x)
-    i <- order(x2, decreasing = decreasing)
-  } else{
-    i <- order(x, decreasing = decreasing)
-  }
-  x[i, , drop = FALSE]
-})
+setMethod(sort, 
+          "GTuples", 
+          function(x, decreasing = FALSE, ignore.strand = FALSE, by) {
+            
+            if (!missing(by)) {
+              stop("Sorry, the 'by' argument is not yet supported.")
+            }
+            
+            if (!isTRUEorFALSE(ignore.strand)) {
+              stop("'ignore.strand' must be TRUE or FALSE")
+            }
+            if (ignore.strand) {
+              x2 <- unstrand(x)
+              i <- order(x2, decreasing = decreasing)
+            } else{
+              i <- order(x, decreasing = decreasing)
+            }
+            x[i, , drop = FALSE]
+          }
+)
