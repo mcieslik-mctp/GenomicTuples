@@ -3,7 +3,6 @@
 ### -------------------------------------------------------------------------
 
 #' @export
-#' 
 #' @keywords internal
 .findIdentical.GTuples <- function(query, subject, select, ignore.strand) {
   

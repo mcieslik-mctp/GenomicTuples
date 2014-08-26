@@ -95,15 +95,8 @@ setMethod("updateObject", "GTuplesList", function(object, ..., verbose = FALSE)
 ### Accessors.
 ###
 
-# TODO: Any required above what are available via inheritance from GRangesList?
-# TODO: May want to disallow some methods, e.g. ranges (also applied to GTuples)
-
 #' @include AllGenerics.R
 #' @export
-#' @examples
-#' \dontrun{
-#' # TODO
-#' }
 setMethod("size", "GTuplesList", function(x) {
   size(x[[1]])
 })
@@ -126,7 +119,6 @@ setMethod("size", "GTuplesList", function(x) {
 
 #' @include AllGenerics.R
 #' @export
-#' @aliases GTuplesList
 setMethod("IPD", "GTuplesList", function(x) {
   unlisted_x <- unlist(x, use.names = FALSE)
   relist(IPD(unlisted_x), x)

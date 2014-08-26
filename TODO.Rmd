@@ -44,6 +44,10 @@ __I don't yet the analogy of a `GIntervalsTree` for a set of tuples. So, for now
 * [x] Coercion
 * [x] Slot getters and setters
 
+## range-squeezers.R
+
+File defines generics. Added documentation on these generics for `GTuples` objects.
+
 # GTuplesList
 
 An `[x]` means that I have at least setup the relevant section in the `GTuples-class.R` file.
@@ -92,9 +96,9 @@ An `[x]` means that I have at least setup the relevant section in the `GTuples-c
 ## findOverlaps-methods.R
 
 * [x] findOverlaps
-* [ ] countOverlaps
-* [ ] overlapsAny
-* [ ] subsetByOverlaps
+* [x] countOverlaps
+* [x] overlapsAny
+* [x] subsetByOverlaps
 
 # Inter-tuple comparisons
 
@@ -125,20 +129,34 @@ __TODO: I need to decide what intra-tuple comparisons make sense.__
 * [x] trim
 * [x] Zooming (symmetrically scales the width).
 
+# mapCoords methods
+
 ## mapCoords-methods.R
 
 * [x] Method definition (disallow it as a method for GTUples)
 
+# Nearest methods
+
 ## nearest-methods.R
 
-__TODO: Documentation__
+* [x] Method descriptions
+* [x] precede and follow
+* [x] nearest
+* [x] distance
+* [x] distanceToNearest 
 
-* [ ] Method definition
-* [ ] precede and follow
-* [ ] nearest
-* [ ] distance
-* [ ] distanceToNearest
-* [ ]
+# Set ops
+
+## setops-methods.R
+
+* [x] union, intersect, setdiff
+* [x] Parallel set operations
+
+# Tile
+
+## tile-methods.R
+
+* [x] Method definition (disallow it as a method for GTUples)
 
 # The rest (nothing todo)
 
@@ -171,6 +189,34 @@ same reasons don't yet exist for `GTuples` but if they do I'll happily add a `ma
 ## makeSeqnameIds.R
 
 Nothing todo.
+
+## phicoef.R
+
+Nothing todo. Not even sure what that's doing in `GenomicRanges`.
+
+## strand-utils.R
+
+Nothing todo.
+
+## test_GenomicRanges_package.R
+
+Nothing todo. Will be using `testthat` package.
+
+## tileGenome.R
+
+Nothing todo.
+
+## transcript-utils.R
+
+Nothing todo.
+
+## utils.R
+
+Nothing todo.
+
+## zzz.R
+
+Nothing todo. __TODO: Do I need one of these for `GenomicTuples`.__
 
 # Credits
 

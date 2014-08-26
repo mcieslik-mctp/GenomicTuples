@@ -47,3 +47,5 @@ Collate:
     'intra-tuple-methods.R'
     'mapCoords-methods.R'
     'nearest-methods.R'
+    'setops-methods.R'
+    'tile-methods.R'

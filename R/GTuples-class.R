@@ -266,6 +266,7 @@ setMethod("c", "GTuples", function(x, ..., ignore.mcols = FALSE,
 ### Getters
 ###
 # TODO: Examples
+
 #' @include AllGenerics.R
 #' @export
 setMethod("size", "GTuples", function(x) {
