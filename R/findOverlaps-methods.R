@@ -58,7 +58,7 @@
 #' @export
 setMethod("findOverlaps", signature = c("GTuples", "GTuples"), 
           function(query, subject, maxgap = 0L, minoverlap = 1L, 
-                   type = c("equal", "start", "end", "within", "any"), 
+                   type = c("any", "start", "end", "within", "equal"), 
                    select = c("all", "first", "last", "arbitrary"), 
                    ...) {
             
@@ -66,17 +66,16 @@ setMethod("findOverlaps", signature = c("GTuples", "GTuples"),
             select <- match.arg(select)
             type <- match.arg(type)
             
-            # Check GTuples are compatible (i.e. have the same size)
-            q_size <- size(query)
-            s_size <- size(subject)
-            if (q_size != s_size) {
-              stop("Cannot findOverlaps between '", class(query), "' and '", 
-                   class(subject), "' if they have different 'size'.")
-            }
-            size <- q_size
             
             # TODO: Make this special case faster
-            if (size >= 3 && type == 'equal') {
+            if (size(query) >= 3 && type == 'equal') {
+              
+              # Check GTuples are compatible (i.e. have the same size)
+              if (size(query) != size(subject)) {
+                stop("Cannot findOverlaps between '", class(query), "' and '", 
+                     class(subject), "' with 'type = \"equal\"' if they have ",
+                     "different 'size'.")
+              }
               
               # The 'maxgap' and 'minoverlap' parameters aren't used when 
               # type is 'equal'.
@@ -106,10 +105,11 @@ setMethod("findOverlaps", signature = c("GTuples", "GTuples"),
 ### findOverlaps-based methods
 ### -------------------------------------------------------------------------
 
+#' @export
 setMethod("countOverlaps", signature = c("GTuples", "GTuples"), 
           function(query, subject, 
                    maxgap = 0L, minoverlap = 1L, 
-                   type = c("equal", "start", "end", "within", "any"), 
+                   type = c("any", "start", "end", "within", "equal"), 
                    ignore.strand = FALSE) {
             counts <- queryHits(findOverlaps(query, subject, maxgap = maxgap, 
                                              minoverlap = minoverlap, 
@@ -118,6 +118,7 @@ setMethod("countOverlaps", signature = c("GTuples", "GTuples"),
             structure(tabulate(counts, NROW(query)), names=names(query))
 })
 
+#' @export
 setMethod("overlapsAny", signature = c("GTuples", "GTuples"), 
           function(query, subject, 
                    maxgap = 0L, minoverlap = 1L, 
@@ -130,6 +131,7 @@ setMethod("overlapsAny", signature = c("GTuples", "GTuples"),
                                 ignore.strand = ignore.strand))
           })
 
+#' @export
 setMethod("subsetByOverlaps", signature = c("GTuples", "GTuples"), 
           function(query, subject, 
                    maxgap = 0L, minoverlap = 1L, 

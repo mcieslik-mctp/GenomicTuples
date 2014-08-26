@@ -114,25 +114,25 @@
 }
 
 \usage{
-\S4method{findOverlaps}{GTuples,GTuples}(query, subject,
+\S4method{findOverlaps}{GTuples, GTuples}(query, subject,
     maxgap = 0L, minoverlap = 1L,
-    type = c("equal", "start", "end", "within", "any"),
+    type = c("any", "start", "end", "within", "equal"),
     select = c("all", "first", "last", "arbitrary"),
     ignore.strand = FALSE)
 
-\S4method{countOverlaps}{GTuples,GTuples}(query, subject,
+\S4method{countOverlaps}{GTuples, GTuples}(query, subject,
     maxgap = 0L, minoverlap = 1L,
-    type = c("equal", "start", "end", "within", "any"), 
+    type = c("any", "start", "end", "within", "equal"), 
     ignore.strand = FALSE)
 
-\S4method{overlapsAny}{GTuples,GTuples}(query, subject,
+\S4method{overlapsAny}{GTuples, GTuples}(query, subject,
     maxgap = 0L, minoverlap = 1L,
-    type = c("equal", "start", "end", "within", "any"), 
+    type = c("any", "start", "end", "within", "equal"), 
     ignore.strand = FALSE)
 
-\S4method{subsetByOverlaps}{GTuples,GTuples}(query, subject,
+\S4method{subsetByOverlaps}{GTuples, GTuples}(query, subject,
     maxgap = 0L, minoverlap = 1L,
-    type = c("equal", "start", "end", "within", "any"),
+    type = c("any", "start", "end", "within", "equal"),
     ignore.strand = FALSE)
 }
 
@@ -169,7 +169,7 @@
   \describe{
     \item{Equal tuple-tuple overlaps}{
       When the \code{query} and the \code{subject} are \code{\link{GTuples}} 
-      objects and \code{type = "equal"} (the default), \code{findOverlaps} uses 
+      objects and \code{type = "equal"}, \code{findOverlaps} uses 
       the seqnames (\code{\link{seqnames}}), positions (\code{\link{tuples}})
       and strand (\code{\link{strand}}) to determine which tuples from the 
       \code{query} exactly match those in the \code{subject}, where a 
@@ -179,6 +179,9 @@
       name, have a compatible pairing of strands (e.g. \code{"+"}/\code{"+"}, 
       \code{"-"}/\code{"-"}, \code{"*"}/\code{"+"}, \code{"*"}/\code{"-"}, 
       etc.), and have identical positions.
+      
+      \strong{NOTE}: Can only find equal tuple-tuple overlaps when 
+      \code{size(query)} is the same as \code{size(subject)}.
       
       }
       
@@ -255,8 +258,9 @@
 
 % TODO: Check how to cite others work on findOverlaps for ranges.
 \author{Peter Hickey for methods involving \code{\link{GTuples}} and 
-\code{\link{GTuplesList}}. P. Aboyoun, S. Falcon, M. Lawrence, N. Gopalakrishnan, H. Pages and H. Corrada Bravo for all the real work underlying the powerful 
-\code{findOverlaps} functionality.}
+\code{\link{GTuplesList}}. P. Aboyoun, S. Falcon, M. Lawrence, 
+N. Gopalakrishnan, H. Pages and H. Corrada Bravo for all the real work 
+underlying the powerful \code{findOverlaps} functionality.}
 
 \seealso{
   \itemize{
