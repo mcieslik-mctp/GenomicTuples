@@ -118,7 +118,7 @@ setMethod("size", "GTuplesList", function(x) {
 ###
 
 # TODO: Does c(gtl, gtl)  correctly deal with size and internalPos slots?
-
+# TODO: grglist when method is implemented in GenomicRanges
 
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ### Utilities.

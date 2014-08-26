@@ -1,7 +1,7 @@
 \name{GTuplesList-class}
 \docType{class}
 
-% Class
+% Class:
 \alias{class:GTuplesList}
 \alias{GTuplesList-class}
 \alias{GTuplesList}
@@ -9,7 +9,7 @@
 % Constructors:
 \alias{GTuplesList}
 % TODO: Document if updateObject is defined
-\alias{updateObject,GTuplesList-method}
+%\alias{updateObject,GTuplesList-method}
 
 % TODO: Decide whether setters (<-) should be allowed or just getters
 % Accessor methods:
@@ -19,14 +19,6 @@
 % documentation
 %\alias{ranges,GTuplesList-method}
 %\alias{ranges<-,GTuplesList-method}
-\alias{tuples,GTuplesList-method}
-\alias{tuples<-,GTuplesList-method}
-\alias{start,GTuplesList-method}
-%\alias{start<-,GTuplesList-method}
-\alias{end,GTuplesList-method}
-%\alias{end<-,GTuplesList-method}
-\alias{width,GTuplesList-method}
-%\alias{width<-,GTuplesList-method}
 \alias{strand,GTuplesList-method}
 %\alias{strand<-,GTuplesList,ANY-method}
 %\alias{strand<-,GTuplesList,character-method}
@@ -44,14 +36,25 @@
 %\alias{coerce,GTuplesList,RangesList-method}
 %\alias{coerce,RangedDataList,GTuplesList-method}
 
+% TODO: Document these once implemented
+% Tuples methods:
+%\alias{tuples,GTuplesList-method}
+%\alias{tuples<-,GTuplesList-method}
+%\alias{start,GTuplesList-method}
+%\alias{start<-,GTuplesList-method}
+%\alias{end,GTuplesList-method}
+%\alias{end<-,GTuplesList-method}
+%\alias{width,GTuplesList-method}
+%\alias{width<-,GTuplesList-method}
+
 % Subsetting:
 \alias{[,GTuplesList,ANY-method}
 \alias{[<-,GTuplesList,ANY,ANY,ANY-method}
 \alias{[[<-,GTuplesList,ANY,ANY,ANY-method}
 
 % extractList() and family:
-\alias{relistToClass,GRanges-method}
-\alias{splitAsListReturnedClass,GRanges-method}
+\alias{relistToClass,GTuples-method}
+\alias{splitAsListReturnedClass,GTuplesList-method}
 
 % show method:
 \alias{show,GTuplesList-method}
@@ -59,22 +62,24 @@
 \title{GTuplesList objects}
 
 \description{
-  The GTuplesList class is a container for storing a collection of
-  GTuples objects. It is derived from GRangesList.
+  The \code{GTuplesList} class is a container for storing a collection of
+  \code{\link{GTuples}} objects. It is derived from 
+  \code{\link[GenomicRanges]{GRangesList}.
 }
 
 \section{Constructor}{
   \describe{
     \item{}{
       \code{GTuplesList(...)}:
-      Creates a GTuplesList object using GTuples objects
+      Creates a \code{GTuplesList} object using \code{\link{GTuples}} objects
       supplied in \code{\ldots}.
     }
   }
 }
 
 \section{Accessors}{
-  In the following code snippets, \code{x} is a GTuples object.
+  In the following code snippets, \code{x} is a \code{\link{GTuplesList}} 
+  object.
   
   \describe{
     \item{}{
@@ -92,13 +97,15 @@
     \item{}{
     % TODO: Check this works as intended
       \code{isEmpty(x)}:
-      Returns a logical indicating either if the GTuplesList has no
+      Returns a logical indicating either if the \code{GTuplesList} has no
       elements or if all its elements are empty.
     }
     \item{}{
       \code{seqnames(x)}, \code{seqnames(x) <- value}:
-      Get or set the sequence names in the form of an RleList. \code{value}
-      can be an RleList or CharacterList object.
+      Get or set the sequence names in the form of an 
+      \code{\link[IRanges]{RleList}}. \code{value} can be an 
+      \code{\link[IRanges]{RleList}} or \code{\link[IRanges]{CharacterList}} 
+      object.
     }
     % TODO: tuples,GTuplesList method
 %    \item{}{
@@ -106,33 +113,33 @@
 %      Get or set the ranges in the form of a CompressedIRangesList.
 %      \code{value} can be a RangesList object.
     }
-    % TODO: Document setters if I decide to add these
     \item{}{
-      \code{start(x)}}:
-      Get \eqn{pos_{1}}.
-    }
-    \item{}{
-      \code{end(x)}}:
-      Get \eqn{pos_{m}}, where \eqn{m} is the \code{size} of the tuples.
-    }
-    \item{}{
-      \code{width(x)}}:
-      Get \eqn{pos_{m} - pos_{1} + 1}, where \eqn{m} is the \code{size} of 
-      the tuples.
+      \code{ranges(x)}, \code{ranges(x) <- value}: Get or set the ranges in the 
+      form of a \code{\link[IRanges]{CompressedIRangesList}}. \code{value} can
+      be a \code{\link[IRanges]{RangesList}} object.
+      
+      \strong{WARNING}: The use of \code{ranges} with \code{GTuplesList} 
+      objects is \strong{strongly} discouraged. It will only get/set 
+      \eqn{pos_{1}} and \eqn{pos_{m}} of the tuples, where \eqn{m} is the 
+      \code{size} of the tuples, as these are what are stored in the "ranges" 
+      slot of the \code{GTuples} objects. 
     }
     \item{}{
       \code{strand(x)}, \code{strand(x) <- value}:
-      Get or set the strand in the form of an RleList. \code{value} can be
-      an RleList, CharacterList or single character. \code{value} as a
-      single character converts all ranges in \code{x} to the same
+      Get or set the strand in the form of an \code{\link[IRanges]{RleList}}. 
+      \code{value} can be an \code{\link[IRanges]{RleList}}, 
+      \code{\link[IRanges]{CharacterList}} or single character. \code{value} as 
+      a single character converts all ranges in \code{x} to the same
       \code{value}; for selective strand conversion (i.e., mixed \dQuote{+}
-      and \dQuote{-}) use RleList or CharacterList. 
+      and \dQuote{-}) use \code{\link[IRanges]{RleList}} or 
+      \code{\link[IRanges]{CharacterList}}. 
     }
     \item{}{
       \code{mcols(x, use.names=FALSE)}, \code{mcols(x) <- value}:
       Get or set the metadata columns.
       \code{value} can be \code{NULL}, or a data.frame-like object (i.e.
-      \link{DataFrame} or data.frame) holding element-wise metadata.
+      \code{\link[GenomicRanges]{DataFrame}} or data.frame) holding 
+      element-wise metadata.
     }
     \item{}{
        \code{elementMetadata(x)}, \code{elementMetadata(x) <- value},
@@ -149,9 +156,9 @@
       Get or set the sequence levels.
       \code{seqlevels(x)} is equivalent to \code{seqlevels(seqinfo(x))}
       or to \code{levels(seqnames(x))}, those 2 expressions being
-      guaranteed to return identical character vectors on a GTuplesList
+      guaranteed to return identical character vectors on a \code{GTuplesList}
       object. \code{value} must be a character vector with no NAs.
-      See \code{?\link{seqlevels}} for more information.
+      See \code{?\link[GenomicRanges]{seqlevels}} for more information.
     }
     \item{}{
       \code{seqlengths(x)}, \code{seqlengths(x) <- value}:
@@ -185,13 +192,57 @@
   }
 }
 
+\section{Tuples methods}{
+  In the following code snippets, x is a \code{GTuplesList} object.
+  
+  \strong{WARNING}: The preferred setter is \code{tuples(x) <- value} and the 
+  use of \code{start(x) <- value}, \code{end(x) <- value} and 
+  \code{width(x) <- value is discouraged}.
+  
+  % TODO: Test and re-document
+  \describe{
+    \item{}{
+      \code{start(x)}, \code{start(x) <- value}:
+      Get or set \eqn{pos_{1}} of the \code{tuples}. \strong{WARNING}: The use 
+      of \code{start(x) <- value} is discouraged; instead, construct the 
+      tuples as the appropriate \code{List} of integer matrices, \code{mvalue}, 
+      and use \code{tuples(x) <- mvalue}.
+    }
+    
+    % TODO: Test and re-document
+    \item{}{
+      \code{end(x)}, \code{end(x) <- value}:
+      Get or set \eqn{pos_{m}} of the tuples, where \eqn{m} is the \code{size} 
+      of the tuples. \strong{WARNING}: The use of \code{end(x) <- value} is 
+      discouraged; instead, construct the tuples as the appropriate \code{List} 
+      of integer matrices, \code{mvalue}, and use \code{tuples(x) <- mvalue}.
+    }
+    
+    % TODO: Implement and document
+    \item{}{
+      \code{IPD(x)}: .
+    }
+    
+    % TODO: Test and re-document
+    \item{}{
+      \code{width(x)}, \code{width(x) <- value}:
+      Get or set \eqn{pos_{m} - pos_{1}} of the tuples, where \eqn{m} is the 
+      \code{size} of the tuples. If using \code{width(x) <- value}, 
+      \eqn{pos_{1}} is held fixed and \eqn{pos_{m}} is altered. 
+      \strong{WARNING}: The use of \code{width(x) <- value} is discouraged; 
+      instead, instead, construct the tuples as the appropriate \code{List} 
+      of integer matrices, \code{mvalue}, and use \code{tuples(x) <- mvalue}.
+    }
+  }
+}
+
 % TODO: Decide what coercion methods are allowed.
 %\section{Coercion}{
 %  
 %}
 
 \section{Subsetting}{
-  In the following code snippets, \code{x} is a GTuplesList object.
+  In the following code snippets, \code{x} is a \code{GTuplesList} object.
 
   \describe{
     \item{}{
@@ -328,7 +379,9 @@
   }
 }
 
-\author{Peter Hickey}
+\author{Peter Hickey for \code{GTuplesList} definition and methods. P. Aboyoun 
+& H. Pages for all the real work underlying the powerful \code{GRangesList} 
+class and methods.}
 
 % TODO: Add any relevant classes/methods from GenomicTuples
 \seealso{
