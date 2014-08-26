@@ -7,13 +7,13 @@
 # and decide which ones I need to redefine or disallow.
 
 # WARNING: GTuples don't support extraColumnSlotNames.
-setClassUnion(name = "matrixOrNULL", members = c("matrix", "NULL"))
+setClassUnion(name = "DataFrameOrNULL", members = c("DataFrame", "NULL"))
 
 #' @export
 setClass("GTuples",
          contains = "GRanges",
          representation(
-           internalPos = "matrixOrNULL", 
+           internalPos = "DataFrameOrNULL", 
            size = "integer"),
          prototype(
            internalPos = NULL,
@@ -29,9 +29,11 @@ setClass("GTuples",
   msg <- NULL
   
   # Check tuples are sorted; only required if m > 1.
-  if (isTRUE(object@size > 2)) {
+  if (isTRUE(object@size > 2) && length(object) != 0L) {
+    # TODO: as.matrix(object@internalPos) doesn't work for some reason.
     if (!.allTuplesSorted(pos1 = object@ranges@start, 
-                          internal_pos = object@internalPos, 
+                          internal_pos = matrix(unlist(object@internalPos), 
+                                                ncol = object@size - 2), 
                           posm = object@ranges@start + 
                             object@ranges@width - 1)) {
       msg <- validMsg(msg, paste0("positions in each tuple must be sorted in ", 
@@ -52,7 +54,7 @@ setClass("GTuples",
   # Only need to check pos1 and posm because already checked 
   # pos1 < internalPos < posm
   # NB: min(x) < 0 is faster than any(x < 0)
-  if (!is.na(object@size)) {
+  if (!is.na(object@size) && length(object) != 0L) {
     if (min(object@ranges@start) < 0 || min(object@ranges@start + 
                                               object@ranges@width - 1) < 0) {
       msg <- validMsg(msg, paste0("positions in each tuple must be positive ",
@@ -97,11 +99,6 @@ setValidity2("GTuples", .valid.GTuples)
 ###
 
 #' @export
-#' @aliases GTuples-class
-#' @examples
-#' \dontrun{
-#' # TODO
-#' }
 GTuples <- function(seqnames = Rle(), tuples = matrix(), 
                     strand = Rle("*", length(seqnames)), ..., 
                     seqlengths = NULL, seqinfo = NULL) {
@@ -138,8 +135,8 @@ GTuples <- function(seqnames = Rle(), tuples = matrix(),
   if (is.na(size) || size < 3) {
     internalPos <- NULL
   } else {
-    internalPos <- tuples[, seq(from = 2L, to = size - 1, by = 1L), 
-                          drop = FALSE]
+    internalPos <- DataFrame(tuples[, seq(from = 2L, to = size - 1, by = 1L), 
+                                    drop = FALSE])
   }
   
   # Create GRanges
@@ -200,6 +197,13 @@ setMethod("as.data.frame", "GTuples", function(x, row.names = NULL,
              stringsAsFactors = FALSE)
 })
 
+#' @export
+setMethod("granges", "GTuples",
+          function(x, use.mcols = FALSE) {
+            callNextMethod()
+          }
+)
+
 # TODO: coercion of data.frame and DataFrame to GTuples. This will be useful 
 # when creating MethPat objects.
 
@@ -219,8 +223,9 @@ setMethod("as.data.frame", "GTuples", function(x, row.names = NULL,
 
 ### Not exported. 'x' *must* be an unnamed list of length >= 1 (not checked).
 .unlist_list_of_GTuples <- function(x, ignore.mcols = FALSE) {
-  if (!isTRUEorFALSE(ignore.mcols))
+  if (!isTRUEorFALSE(ignore.mcols)) {
     stop("'ignore.mcols' must be TRUE or FALSE")
+  }
   ans_class <- class(x[[1L]])
   ans_seqinfo <- do.call(merge, lapply(x, seqinfo))
   ans_seqnames <- do.call(c, lapply(x, seqnames))
@@ -240,7 +245,6 @@ setMethod("as.data.frame", "GTuples", function(x, row.names = NULL,
       size = ans_size, internalPos = ans_internalPos)
 }
 
-# TODO: c(gt, gt) doesn't correctly deal with size and internalPos slots
 #' @export
 setMethod("c", "GTuples", function(x, ..., ignore.mcols = FALSE, 
                                    recursive = FALSE) {
@@ -257,9 +261,6 @@ setMethod("c", "GTuples", function(x, ..., ignore.mcols = FALSE,
   }
   .unlist_list_of_GTuples(args, ignore.mcols = ignore.mcols)
 })
-
-# UP TO HERE!
-# TODO: Need to make sure size and internalPos slots get created
 
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ### Getters
@@ -286,7 +287,7 @@ setMethod("tuples", "GTuples", function(x, use.mcols = FALSE) {
   } else if (size(x) == 1L) {
     ans <- as.matrix(start(x))
   } else{
-    ans <- cbind(start(x), x@internalPos, end(x))
+    ans <- cbind(start(x), as.matrix(x@internalPos), end(x))
   }
   
   return(ans)
@@ -297,7 +298,7 @@ setMethod("tuples", "GTuples", function(x, use.mcols = FALSE) {
 ###
 
 # TODO: Can't use split,GRanges-class because it ignores the internalPos and size slots
-
+#' @export
 setMethod("split", "GTuples", function(x, f, drop = FALSE, ...) {
   # (1) split,GRanges calls IRanges::splitAsList (via inheritance GRanges -> 
   # Vector)
@@ -316,7 +317,7 @@ setMethod("split", "GTuples", function(x, f, drop = FALSE, ...) {
   elementMetadata_split <- split(elementMetadata(x), f)
   metadata_split <- split(metadata(x), f)
   if (isTRUE(size(x) > 2)) {
-    internalPos_split <- lapply(split(DataFrame(x@internalPos), f), as.matrix) 
+    internalPos_split <- split(x@internalPos, f)
   } else{
     internalPos_split <- vector(mode = "list", length = length(seqnames_split))
   }
@@ -335,6 +336,7 @@ setMethod("split", "GTuples", function(x, f, drop = FALSE, ...) {
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ### Setters
 ###
+#' @export
 setReplaceMethod("tuples", "GTuples", function(x, value) {
   if (!is(value, "matrix")) {
     value <- as(value, "matrix")
@@ -360,7 +362,7 @@ setReplaceMethod("tuples", "GTuples", function(x, value) {
     x
   } else if (m > 2L) {
     start(x) <- value[, 1]
-    x@internalPos <- value[, seq.int(2, m - 1, 1)]
+    x@internalPos <- DataFrame(value[, seq.int(2, m - 1, 1)])
     end(x) <- value[, m]
     x
   }
@@ -370,20 +372,14 @@ setReplaceMethod("tuples", "GTuples", function(x, value) {
 ### Tuples methods
 ###
 
+# TODO
+
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ### Utilities
 ###
 
 #' @include AllGenerics.R
 #' @export
-#' @aliases GTuples
-#' @examples
-#' gt1 <- GTuples(seqnames = 'chr1', tuples = matrix(10L))
-#' IPD(gt1)
-#' gt2 <- GTuples('chr1', matrix(c(10L, 20L), ncol = 2))
-#' IPD(gt2)
-#' gt3 <- GTuples('chr1', matrix(c(10L, 20L, 25L), ncol = 3))
-#' IPD(gt3)
 setMethod("IPD", "GTuples", function(x) {
   size <- size(x)
   if (is.na(size)) {
@@ -393,7 +389,7 @@ setMethod("IPD", "GTuples", function(x) {
   } else if (isTRUE(size == 2L)) {
     ipd <- width(x)
   } else {
-    ipd <- .IPD(start(x), x@internal_pos, end(x))
+    ipd <- .IPD(start(x), as.matrix(x@internal_pos), end(x))
   }
   
   return(ipd)
@@ -403,6 +399,13 @@ setMethod("IPD", "GTuples", function(x) {
 ### Subsetting
 ###
 # TODO: Test the subsetting methods defined in GenomicRanges-class.R
+
+# TODO: Should I explicitly define this via callNextMethod() 
+# extractROWS works via inheritance because it handles extraColumnSlots 
+# (internalPos)
+
+# TODO: Should I explicitly define this via callNextMethod()
+# "[" works via inheritance because it calls extractROWS
 
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ### Show
@@ -423,10 +426,14 @@ setMethod(GenomicRanges:::extraColumnSlotNames, "GTuples",
     if (x@size == 1L) {
       ans <- cbind(as.character(x@seqnames), x@ranges@start, 
                    as.character(x@strand))
+    } else if (x@size == 2L) {
+      ans <- cbind(as.character(x@seqnames), x@ranges@start, 
+                   x@ranges@start + x@ranges@width - 1, as.character(x@strand))
     } else {
-      ans <- ans <- cbind(as.character(x@seqnames), x@ranges@start, 
-                          x@internalPos, x@ranges@start + x@ranges@width - 1, 
-                          as.character(x@strand))
+      # TODO: as.matrix(x@internalPos) doesn't work for some reason.
+      ans <- cbind(as.character(x@seqnames), x@ranges@start, 
+                   matrix(unlist(x@internalPos), ncol = x@size - 2),
+                   x@ranges@start + x@ranges@width - 1, as.character(x@strand))
     }
     colnames(ans) <- c("seqnames", paste0('pos', seq_len(x@size)), "strand")
   } else{
@@ -464,7 +471,7 @@ showGTuples <- function(x, margin = "", with.classinfo = FALSE,
         " and ", nc, " metadata ", ifelse(nc == 1L, "column", "columns"), 
         ":\n", sep = "")
   } else{
-    cat(class(x), " with 0 tuples and 0 metadata columns:\n")
+    cat(class(x), " with 0 tuples and 0 metadata columns:\n", sep = "")
   }
   
   out <- S4Vectors:::makePrettyMatrixForCompactPrinting(x, .makeNakedMatFromGTuples)

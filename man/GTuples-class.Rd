@@ -18,8 +18,6 @@
 % documentation.
 %\alias{ranges,GTuples-method}
 %\alias{ranges<-,GTuples-method}
-\alias{tuples,GTuples-method}
-\alias{tuples<-,GTuples-method}
 \alias{strand,GTuples-method}
 \alias{strand<-,GTuples-method}
 \alias{elementMetadata<-,GTuples-method}
@@ -34,8 +32,11 @@
 % TODO: Add aliases for any additional coercion methods.
 %\alias{coerce,GRanges,GTuples-method}
 \alias{as.data.frame,GTuples-method}
+\alias{granges,GTuples-method}
 
 % Tuples methods:
+\alias{tuples,GTuples-method}
+\alias{tuples<-,GTuples-method}
 \alias{start,GTuples-method}
 \alias{start<-,GTuples-method}
 \alias{end,GTuples-method}
@@ -110,9 +111,9 @@
       stored in the \code{GTuples} object.}
 
       \item{\code{internalPos}}{If the \code{size} of the genomic tuples is 
-      greater than  2, \code{internalPos} is an integer matrix storing the 
-      "internal" positions of each  genomic tuple. Otherwise \code{internalPos} 
-      is \code{NULL}.}
+      greater than 2, \code{internalPos} is an integer 
+      \code{\link[IRanges]{DataFrame}} storing the "internal" positions of each 
+      genomic tuple column-wise. Otherwise \code{internalPos} is \code{NULL}.}
     }
 }
 
@@ -200,12 +201,14 @@
    }
 
    \item{}{
-   \code{ranges(x)}, \code{ranges(x) <- value}: \strong{WARNING}: The use of 
-   \code{ranges} with \code{GTuples} objects is \strong{strongly} discouraged. 
-   It will only alter \eqn{pos_{1}} and \eqn{pos_{m}} of the tuples, where 
-   \eqn{m} is the \code{size} of the tuples, as these are what are stored in 
-   the "ranges" slot of a \code{GTuples} object. Get or set the ranges in the 
-   form of a CompressedIRangesList. \code{value} can be a RangesList object.
+    \code{ranges(x)}, \code{ranges(x) <- value}: Get or set the ranges in the 
+    form of a CompressedIRangesList. \code{value} can be a RangesList object.
+    
+    \strong{WARNING}: The use of \code{ranges} with \code{GTuples} objects is 
+    \strong{strongly} discouraged. It will only get/set \eqn{pos_{1}} and 
+    \eqn{pos_{m}} of the tuples, where \eqn{m} is the \code{size} of the 
+    tuples, as these are what are stored in the "ranges" slot of a 
+    \code{GTuples} object.
    }
 
    \item{}{
@@ -292,10 +295,6 @@
   \strong{WARNING}: The preferred setter is \code{tuples(x) <- value} and the 
   use of \code{start(x) <- value}, \code{end(x) <- value} and 
   \code{width(x) <- value is discouraged}.
-  
-  \describe{
-    
-    }
     
   \describe{
     \item{}{
@@ -315,11 +314,10 @@
     }
     
     \item{}{
-      \code{IPD}: Get the intra-pair distances (\code{IPD}). \code{IPD} is only 
-      defined for tuples with \code{size} > 1. The
-      \code{IPD} of a tuple with \code{size}\eqn{= m} is the vector of
-      intra-pair distances, \eqn{(pos_{2} - pos_{1}, \ldots, pos_{m} -
-      pos_{m - 1})}.
+      \code{IPD(x)}: Get the intra-pair distances (\code{IPD}). \code{IPD} is 
+      only defined for tuples with \code{size} > 1. The \code{IPD} of a tuple 
+      with \code{size}\eqn{= m} is the vector of intra-pair distances, 
+      \eqn{(pos_{2} - pos_{1}, \ldots, pos_{m} - pos_{m - 1})}.
     }
     
     \item{}{
