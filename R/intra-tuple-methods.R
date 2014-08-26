@@ -21,6 +21,7 @@
 ### shift()
 ###
 
+#' @export
 setMethod("shift", 
           "GTuples",
           function(x, shift = 0L, use.names = TRUE) {
@@ -31,6 +32,7 @@ setMethod("shift",
           }
 )
 
+#' @export
 setMethod("shift", 
           "GTuplesList",
           function(x, shift = 0L, use.names = TRUE) {
@@ -65,6 +67,7 @@ setMethod("shift",
 # TODO: Could define flank for GTuples and GTuplesList via inheritance from
 # GRanges and GRangesList but don't know if this really makes sense.
 
+#' @export
 setMethod("flank", 
           "GTuples", 
           function(x, width, start = TRUE, both = FALSE, use.names = TRUE, 
@@ -94,6 +97,7 @@ setMethod("flank",
 # TODO: Could define promoters for GTuples and GTuplesList via inheritance from
 # GRanges and GRangesList but don't know if this really makes sense.
 
+#' @export
 setMethod("promoters", 
           "GTuples", 
           function(x, upstream = 2000, downstream = 200, ...) {
@@ -128,6 +132,7 @@ setMethod("promoters",
 # TODO: Could define resize for GTuples and GTuplesList via inheritance from
 # GRanges and GRangesList but don't know if this really makes sense.
 
+#' @export
 setMethod("resize", 
           "GTuples", 
           function(x, width, fix = "start", use.names = TRUE, 
@@ -143,6 +148,7 @@ setMethod("resize",
 
 # TODO: Could define restrict for GTuples and GTuplesList via inheritance from
 # GRanges and GRangesList but don't know if this really makes sense.
+#' @export
 setMethod("restrict", 
           "GenomicRanges",
           function(x, start = NA, end = NA, keep.all.ranges = FALSE, 
@@ -178,7 +184,7 @@ setMethod("restrict",
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ### Zooming (symmetrically scales the width).
 ###
-
+#' @export
 setMethod("Ops", 
           c("GTuples", "numeric"),
           function(e1, e2) {

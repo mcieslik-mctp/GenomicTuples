@@ -14,10 +14,12 @@
 %\alias{flank,GTuples-method}
 %\alias{flank,GTuplesList-method}
 
+% TODO: Delete these aliases if not required
 %\alias{promoters}
 %\alias{promoters,GenomicRanges-method}
 %\alias{promoters,GRangesList-method}
 
+% TODO: Delete these aliases if not required
 %\alias{resize}
 %\alias{resize,GenomicRanges-method}
 
@@ -35,7 +37,7 @@
   This man page documents intra tuple transformations of a
   \code{\link{GTuples}} or a \code{\link{GTuplesList}} object.
   
-  \strong{NOTE}: These are \strong{not} the same as intra-range methods defined 
+  \strong{NOTE}: These are not exactly the same as intra-range methods defined 
   in the \pkg{GenomicRanges} package 
   (\code{\link[GenomicRanges]{intra-range-methods}}) or in the \pkg{IRanges} 
   package (\code{\link[IRanges]{intra-range-methods}}).
@@ -94,7 +96,9 @@ use.names = TRUE)
   }
 }
 
-\author{Peter Hickey}
+\author{Peter Hickey for methods involving \code{GTuples} and 
+\code{GTuplesList}. P. Aboyoun and V. Obenchain <vobencha@fhcrc.org> for all 
+the real work underlying the powerful intra-range methods.}
 
 \seealso{
   \itemize{
