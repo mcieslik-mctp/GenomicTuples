@@ -2,5 +2,23 @@
 ### "coverage" methods
 ### -------------------------------------------------------------------------
 ###
-### TODO: Not sure how to implement or whether it's necess. 
-### So, for now don't allow it.
+
+setMethod("coverage", 
+          "GTuples",
+          function(x, shift = 0L, width = NULL, weight = 1L,
+                   method = c("auto", "sort", "hash"))
+          {
+            stop(paste0(class(x), " do not currently support the 'coverage' ", 
+                        "method."))
+          }
+)
+
+setMethod("coverage", 
+          "GTuplesList",
+          function(x, shift = 0L, width = NULL, weight = 1L,
+                   method=c("auto", "sort", "hash"))
+          {
+            stop(paste0(class(x), " do not currently support the 'coverage' ", 
+                        "method."))
+          }
+)
