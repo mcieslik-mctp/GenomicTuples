@@ -14,24 +14,22 @@
 ### precede() and follow()
 ###
 
-# TODO: Can these safely inherit from GRanges and GRangesList?
-# TODO: Think I need to include ignore.strand in 
-# findOverlaps,GTuples,GTuples-method
+# Methods for GTuples defined via inheritance to GRanges.
 
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ### nearest()
 ###
 
-# TODO: Can these safely inherit from GRanges and GRangesList?
+# Methods for GTuples defined via inheritance to GRanges.
 
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ### distance()
 ###
 
-# TODO: Can these safely inherit from GRanges and GRangesList?
+# Methods for GTuples defined via inheritance to GRanges.
 
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ### distanceToNearest()
 ###
 
-# TODO: Can these safely inherit from GRanges and GRangesList?
+# Methods for GTuples defined via inheritance to GRanges.
