@@ -129,8 +129,6 @@ setMethod("==", c("GTuples", "GTuples"), function(e1, e2) {
 ### only check pos1, posm of of each tuple, which is okay provided size < 3 but 
 ### not if size >= 3.
 ###
-### anyDuplicated() will be very slightly faster than any(duplicated()).
-###
 ### unique() will work out-of-the-box on an GTuples object thanks to the 
 ### method for GRanges objects, which inherits from Vector objects.
 .duplicated.GTuples <- function(x, incomparables = FALSE, fromLast = FALSE, 
@@ -202,58 +200,6 @@ duplicated.GTuples <- function(x, incomparables = FALSE, ...) {
 }
 #' @export
 setMethod("duplicated", "GTuples", .duplicated.GTuples)
-
-.anyDuplicated.GTuples <- function(x, incomparables = FALSE){
-  if (!identical(incomparables, FALSE)){
-    stop("\"anDduplicated\" method for GTuples objects ",
-         "only accepts 'incomparables=FALSE'")
-  }
-  
-  if (is.na(size(x))) {
-    stop("Cannot find duplicates in empty GTuples.")
-  }
-  
-  if (size(x) == 1L) { 
-    int_seqnames <- as.integer(seqnames(x))
-    int_strand <- as.integer(strand(x))
-    int_pos <- start(x)
-    dim(int_pos) <- c(length(x), size(x))
-  } else if (size(x) > 1) {
-    int_seqnames <- as.integer(seqnames(x))
-    int_strand <- as.integer(strand(x))
-    int_pos <- c(start(x), x@internalPos, end(x))
-    dim(int_pos) <- c(length(x), size(x))
-  }
-  
-  val <- .candidateDuplicateGTuples(int_seqnames = int_seqnames,
-                                    int_strand = int_strand,
-                                    int_pos = int_pos)
-  
-  if (isTRUE(any(val))){
-    # vv_idx (if non-zero) is the index of the first duplicated element in 
-    # val[val], instead of val (which is what we really want).
-    vv_idx <- anyDuplicated(cbind(int_seqnames[val], int_strand[val], 
-                                  int_pos[val, , drop = FALSE], 
-                                  deparse.level = 0))
-    if (!identical(vv_idx, 0L)){
-      v_idx <- which(val)[vv_idx]
-    } else{
-      v_idx <- 0L
-    }
-  } else{
-    v_idx <- 0L
-  }
-  return(v_idx)
-}
-
-# TODO: Is there is a need for an S3/S4 combo? If so, why?
-# S3/S4 combo for duplicated.GTuples
-#' @export
-anyDuplicated.GTuples <- function(x, incomparables = FALSE, ...){
-  .anyDuplicated.GTuples(x, incomparables = incomparables, ...)
-}
-#' @export
-setMethod("anyDuplicated", "GTuples", .anyDuplicated.GTuples)
 
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ### match()
