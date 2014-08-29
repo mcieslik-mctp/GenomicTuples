@@ -325,41 +325,7 @@ setMethod("tuples",
 ### Splitting
 ###
 
-# TODO: Can't use split,GRanges-class because it ignores the internalPos and size slots
-#' @export
-setMethod("split", "GTuples", function(x, f, drop = FALSE, ...) {
-  # (1) split,GRanges calls IRanges::splitAsList (via inheritance GRanges -> 
-  # Vector)
-  # (2) This in turn calls IRanges::splitAsList_default 
-  # (via inheritance GRanges -> ANY)
-  # (3) This in turn calls IRanges:::splitAsList_default
-  # (4) This in turn calls relist
-  # Other variables are modified on the way down.
-  # This is going to be difficult to properly replicate. Instead, I will defer 
-  # to the split,GRanges method and then add back in the internalPos and size 
-  # slots
-  
-  seqnames_split <- split(seqnames(x), f)
-  ranges_split <- split(ranges(x), f)
-  strand_split <- split(strand(x), f)
-  elementMetadata_split <- split(elementMetadata(x), f)
-  metadata_split <- split(metadata(x), f)
-  if (isTRUE(size(x) > 2)) {
-    internalPos_split <- split.data.frame(x@internalPos, f)
-  } else{
-    internalPos_split <- vector(mode = "list", length = length(seqnames_split))
-  }
-  
-  GTuplesList(mapply(function(internalPos, size, seqnames, ranges, strand, 
-                              elementMetadata, seqinfo, metadata){
-    new("GTuples", internalPos = internalPos, size = size, seqnames = seqnames, 
-        ranges = ranges, strand = strand, elementMetadata = elementMetadata, 
-        seqinfo = seqinfo, metadata = metadata)
-  }, internalPos = internalPos_split, seqnames = seqnames_split, 
-  ranges = ranges_split, strand = strand_split, 
-  elementMetadata = elementMetadata_split,metadata = metadata_split, 
-  MoreArgs = list(size = size(x), seqinfo = seqinfo(x))))
-})
+# Via inheritance to split,Vector-method.
 
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ### Setters
