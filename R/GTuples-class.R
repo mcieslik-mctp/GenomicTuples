@@ -224,12 +224,15 @@ setMethod("granges",
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ### Updating and cloning.
 ###
-### GenomicRanges/GRanges have fancy update/clone methods. I don't really 
-### understand these so I'm not yet trying to copy this behaviour in 
-### GenomicTuples (except via inheritance).
-# TODO: Test and understand - clone seems to work out of the box, as long as 
-# internalPos is given as appropriate, 
-# e.g. clone(x, ranges = new_ranges, internaPos = new_internalPos)
+### An object is either 'update'd in place (usually with a replacement
+### method) or 'clone'd (copied), with specified slots/fields overridden.
+###
+### From GenomicRanges-class.R "For an object with a pure S4 slot 
+### representation, these both map to initialize. Reference classes will want 
+### to override 'update'. Other external representations need further 
+### customization." Note, however, that these are not exported from 
+### GenomicRanges. I think I can safely use these for GTuples via inheritance
+### to GenomicRanges, but should be careful whenever using them and test well.
 
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ### Combining
