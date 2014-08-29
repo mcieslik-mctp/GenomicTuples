@@ -175,6 +175,43 @@ setMethod("updateObject",
 ### Coercion
 ###
 
+setMethod("as.data.frame", 
+          "GTuples", 
+          function(x, row.names = NULL, optional = FALSE, ...) {
+            tuples <- tuples(x)
+            if (missing(row.names)) {
+              row.names <- names(x)
+            }
+            if (!is.null(names(x))) {
+              names(x) <- NULL
+            }
+            mcols_df <- as.data.frame(mcols(x), ...)
+            extraColumnNames <- GenomicRanges:::extraColumnSlotNames(x)
+            extraColumnNames <- extraColumnNames[extraColumnNames != 
+                                                   'internalPos']
+            if (length(extraColumnNames) > 0L) {
+              mcols_df <- cbind(as.data.frame(extraColumnSlotsAsDF, ...), 
+                                mcols_df)
+            }
+            # TODO: S4 dispatch seems to be going awry so I have to force
+            # the conversion of seqnames(x) and strand(x) to factor.
+            # This is done using the exact code called by as.factor,Rle-method
+#             data.frame(seqnames = as.factor(seqnames(x)), 
+#                        as.data.frame(tuples), strand = as.factor(strand(x)), 
+#                        mcols_df, row.names = row.names, 
+#                        stringsAsFactors = FALSE)
+            seqnames <- rep.int(as.factor(runValue(seqnames(x))), 
+                                runLength(seqnames(x)))
+            strand <- rep.int(as.factor(runValue(strand(x))), 
+                              runLength(strand(x)))
+            data.frame(seqnames = seqnames,
+                       as.data.frame(tuples),
+                       strand = strand,
+                       mcols_df,
+                       row.names = row.names,
+                       stringsAsFactors = FALSE)
+          }
+)
 
 #' @export
 setMethod("granges", 

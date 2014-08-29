@@ -32,8 +32,8 @@
 % TODO: Add aliases for any additional coercion methods.
 %\alias{coerce,GRanges,GTuples-method}
 \alias{as.data.frame,GTuples-method}
-% TODO: Document granges
-\alias{granges,GTuples-method}
+% Don't want to expose coercion to granges "feature".
+%\alias{granges,GTuples-method}
 
 % Tuples methods:
 \alias{tuples,GTuples-method}
@@ -160,12 +160,10 @@
     \item{}{
       \code{as.data.frame(x, row.names = NULL, optional = FALSE, ...)}:
       Creates a data.frame with columns \code{seqnames} (factor), 
-      \code{strand} (factor), \code{pos1} (integer), ..., 
-      \code{posm} (integer), where \code{m} is the \code{size(x)}, as well as 
-      the additional metadata columns stored in \code{mcols(x)}. 
-      Pass an explicit
-      \code{stringsAsFactors=TRUE/FALSE} argument via \code{\ldots} to
-      override the default conversions for the metadata columns in
+      \code{tuples} (integer), \code{strand} (factor), as well as 
+      the additional metadata columns stored in \code{mcols(x)}. Pass an 
+      explicit \code{stringsAsFactors=TRUE/FALSE} argument via \code{\ldots} to
+      override the default conversions for the metadata columns in 
       \code{mcols(x)}.
     }
   }
