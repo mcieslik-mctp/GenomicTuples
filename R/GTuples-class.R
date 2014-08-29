@@ -377,20 +377,23 @@ setReplaceMethod("tuples",
 
 #' @include AllGenerics.R
 #' @export
-setMethod("IPD", "GTuples", function(x) {
-  size <- size(x)
-  if (is.na(size)) {
-    stop("Cannot compute IPD from an empty GTuples.")
-  } else if (isTRUE(size == 1L)) {
-    stop("It does not make sense to compute IPD when size = 1.")
-  } else if (isTRUE(size == 2L)) {
-    ipd <- width(x)
-  } else {
-    ipd <- .IPD(start(x), as.matrix(x@internal_pos), end(x))
-  }
-  
-  return(ipd)
-})
+setMethod("IPD", 
+          "GTuples", 
+          function(x) {
+            size <- size(x)
+            if (is.na(size)) {
+              stop("Cannot compute IPD from an empty GTuples.")
+            } else if (isTRUE(size == 1L)) {
+              stop("It does not make sense to compute IPD when size = 1.")
+            } else if (isTRUE(size == 2L)) {
+              ipd <- width(x)
+            } else {
+              ipd <- .IPD(start(x), as.matrix(x@internal_pos), end(x))
+            }
+            
+            return(ipd)
+          }
+)
 
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ### Subsetting
@@ -410,10 +413,12 @@ setMethod("IPD", "GTuples", function(x) {
 
 # TODO: Decide if I should support the with.classinfo argument?
 # Ensure the extraPos column "sticks" during subsetting, etc.
-setMethod(GenomicRanges:::extraColumnSlotNames, "GTuples",
+setMethod(GenomicRanges:::extraColumnSlotNames, 
+          "GTuples",
           function(x) {
             c("internalPos")
-          })
+          }
+)
 
 # The show method is adapted from that of GRanges
 .makeNakedMatFromGTuples <- function(x) {
@@ -470,6 +475,7 @@ showGTuples <- function(x, margin = "", with.classinfo = FALSE,
   }
   
   out <- S4Vectors:::makePrettyMatrixForCompactPrinting(x, .makeNakedMatFromGTuples)
+  # TODO: Try to implement
   ## These lines commented out because classinfo is more complicated for GTuples 
   ## objects than GRanges objects. For example, some of the `pos` information 
   ## is stored in an IRanges object while some is stored in a matrix.
@@ -494,6 +500,9 @@ showGTuples <- function(x, margin = "", with.classinfo = FALSE,
 }
 
 #' @export
-setMethod("show", "GTuples", function(object){
-  showGTuples(object, margin="  ", print.seqlengths = TRUE)
-})
+setMethod("show", 
+          "GTuples", 
+          function(object) {
+            showGTuples(object, margin="  ", print.seqlengths = TRUE)
+          }
+)
