@@ -31,15 +31,3 @@
   
   return(val)
 }
-
-# Define a replaceROWS function with signature NULL. Required for when slots 
-# that are extraColumnSlots are NULL and calling the replaceROWS method for 
-# GTuples (via inheritance to the replaceROWS method for GenomicRanges).
-# TODO: Perhaps more generally useful than in my package?
-#' @export
-setMethod("replaceROWS", 
-          "NULL",
-          function(x, i, value) {
-            NULL
-          }
-)
