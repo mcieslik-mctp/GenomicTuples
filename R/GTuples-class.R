@@ -263,34 +263,40 @@ setMethod("granges",
 }
 
 #' @export
-setMethod("c", "GTuples", function(x, ..., ignore.mcols = FALSE, 
-                                   recursive = FALSE) {
-  if (!identical(recursive, FALSE)) {
-    stop("'recursive' argument not supported")
-  }
-  if (missing(x)) {
-    args <- unname(list(...))
-  } else {
-    args <- unname(list(x, ...))
-  }
-  if (!.zero_range(sapply(args, size))) {
-    stop("Cannot concatenate GTuples containing tuples of different 'size'.")
-  }
-  .unlist_list_of_GTuples(args, ignore.mcols = ignore.mcols)
-})
+setMethod("c", 
+          "GTuples", 
+          function(x, ..., ignore.mcols = FALSE, recursive = FALSE) {
+            if (!identical(recursive, FALSE)) {
+              stop("'recursive' argument not supported")
+            }
+            if (missing(x)) {
+              args <- unname(list(...))
+            } else {
+              args <- unname(list(x, ...))
+            }
+            if (!.zero_range(sapply(args, size))) {
+              stop("Cannot concatenate GTuples containing tuples of ", 
+                   "different 'size'.")
+            }
+            .unlist_list_of_GTuples(args, ignore.mcols = ignore.mcols)
+          }
+)
 
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ### Getters
 ###
-# TODO: Examples
+# TODO: Examples in GTuples-class.Rd
 
 #' @include AllGenerics.R
 #' @export
-setMethod("size", "GTuples", function(x) {
-  x@size
-})
+setMethod("size", 
+          "GTuples", 
+          function(x) {
+            x@size
+          }
+)
 
-# TODO: Examples
+# TODO: Examples in GTuples-class.Rd
 #' @include AllGenerics.R
 #' @export
 setMethod("tuples", 
@@ -310,9 +316,10 @@ setMethod("tuples",
             } else{
               ans <- cbind(start(x), x@internalPos, end(x))
               colnames(ans) <- paste0('pos', seq_len(size(x)))
-  }
-  return(ans)
-})
+            }
+            return(ans)
+          }
+)
 
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ### Splitting
@@ -358,36 +365,39 @@ setMethod("split", "GTuples", function(x, f, drop = FALSE, ...) {
 ### Setters
 ###
 #' @export
-setReplaceMethod("tuples", "GTuples", function(x, value) {
-  if (!is(value, "matrix")) {
-    value <- as(value, "matrix")
-  }
-  mode(value) <- "integer"
-  n <- length(x)
-  k <- length(value)
-  if (k != n) {
-    stop(k, " elements in value to replace ", n, " elements")
-  }
-  m <- ncol(value)
-  if (m != size(x)) {
-    stop(paste0("Size of tuples in 'x' ", size(x), " not equal to size of",
-                " tuples in 'value' ", m))
-  }
-  if (is.na(m)) {
-    x
-  } else if (m == 1L) {
-    start(x) <- value
-    x
-  } else if (m == 2L) {
-    ranges(x) <- value
-    x
-  } else if (m > 2L) {
-    start(x) <- value[, 1]
-    x@internalPos <- value[, seq.int(2, m - 1, 1)]
-    end(x) <- value[, m]
-    x
-  }
-})
+setReplaceMethod("tuples", 
+                 "GTuples", 
+                 function(x, value) {
+                   if (!is(value, "matrix")) {
+                     value <- as(value, "matrix")
+                   }
+                   mode(value) <- "integer"
+                   n <- length(x)
+                   k <- length(value)
+                   if (k != n) {
+                     stop(k, " elements in value to replace ", n, " elements")
+                   }
+                   m <- ncol(value)
+                   if (m != size(x)) {
+                     stop(paste0("Size of tuples in 'x' ", size(x), " not ", 
+                                 "equal to size of tuples in 'value' ", m))
+                   }
+                   if (is.na(m)) {
+                     x
+                   } else if (m == 1L) {
+                     start(x) <- value
+                     x
+                   } else if (m == 2L) {
+                     ranges(x) <- value
+                     x
+                   } else if (m > 2L) {
+                     start(x) <- value[, 1]
+                     x@internalPos <- value[, seq.int(2, m - 1, 1)]
+                     end(x) <- value[, m]
+                     x
+                   }
+                 }
+)
 
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ### Tuples methods
