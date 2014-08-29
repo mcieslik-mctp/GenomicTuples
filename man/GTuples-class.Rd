@@ -113,8 +113,8 @@
 
       \item{\code{internalPos}}{If the \code{size} of the genomic tuples is 
       greater than 2, \code{internalPos} is an integer 
-      \code{\link[IRanges]{DataFrame}} storing the "internal" positions of each 
-      genomic tuple column-wise. Otherwise \code{internalPos} is \code{NULL}.}
+      \code{matrix} storing the "internal" positions of each genomic tuple. 
+      Otherwise \code{internalPos} is \code{NULL}.}
     }
 }
 

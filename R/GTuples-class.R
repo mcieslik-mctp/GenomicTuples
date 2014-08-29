@@ -3,17 +3,13 @@
 ### -------------------------------------------------------------------------
 ###
 
-# TODO: Go through methods defined in GenomicRanges-class.R and GRanges-class.R 
-# and decide which ones I need to redefine or disallow.
-
-# WARNING: GTuples don't support extraColumnSlotNames.
-setClassUnion(name = "DataFrameOrNULL", members = c("DataFrame", "NULL"))
+setClassUnion(name = "matrixOrNULL", members = c("matrix", "NULL"))
 
 #' @export
 setClass("GTuples",
          contains = "GRanges",
          representation(
-           internalPos = "DataFrameOrNULL", 
+           internalPos = "matrixOrNULL", 
            size = "integer"),
          prototype(
            internalPos = NULL,
@@ -30,10 +26,8 @@ setClass("GTuples",
   
   # Check tuples are sorted; only required if m > 1.
   if (isTRUE(object@size > 2) && length(object) != 0L) {
-    # TODO: as.matrix(object@internalPos) doesn't work for some reason.
     if (!.allTuplesSorted(pos1 = object@ranges@start, 
-                          internal_pos = matrix(unlist(object@internalPos), 
-                                                ncol = object@size - 2), 
+                          internal_pos = object@internalPos, 
                           posm = object@ranges@start + 
                             object@ranges@width - 1)) {
       msg <- validMsg(msg, paste0("positions in each tuple must be sorted in ", 
@@ -135,8 +129,8 @@ GTuples <- function(seqnames = Rle(), tuples = matrix(),
   if (is.na(size) || size < 3) {
     internalPos <- NULL
   } else {
-    internalPos <- DataFrame(tuples[, seq(from = 2L, to = size - 1, by = 1L), 
-                                    drop = FALSE])
+    internalPos <- tuples[, seq(from = 2L, to = size - 1, by = 1L), 
+                          drop = FALSE]
   }
   
   # Create GRanges
@@ -148,64 +142,47 @@ GTuples <- function(seqnames = Rle(), tuples = matrix(),
 
 # TODO: Test
 #' @export
-setMethod("updateObject", "GTuples", function(object, ..., verbose=FALSE) { 
-  if (verbose) {
-    message("updateObject(object = 'GTuples')")
-  }
-  if (is(try(object@seqinfo, silent = TRUE), "try-error")) {
-    object <- new(class(object),
-                  seqnames = object@seqnames,
-                  ranges = object@ranges,
-                  strand = object@strand,
-                  elementMetadata = object@elementMetadata,
-                  metadata = object@metadata,
-                  seqinfo = Seqinfo(seqnames = names(object@seqlengths),
-                                    seqlengths = object@seqlengths),
-                  size = object@size,
-                  internalPos = object@internalPos)
+setMethod("updateObject", 
+          "GTuples", 
+          function(object, ..., verbose=FALSE) { 
+            if (verbose) {
+              message("updateObject(object = 'GTuples')")
+            }
+            if (is(try(object@seqinfo, silent = TRUE), "try-error")) {
+              object <- new(class(object),
+                            seqnames = object@seqnames,
+                            ranges = object@ranges,
+                            strand = object@strand,
+                            elementMetadata = object@elementMetadata,
+                            metadata = object@metadata,
+                            seqinfo = Seqinfo(seqnames = 
+                                                names(object@seqlengths),
+                                              seqlengths = object@seqlengths),
+                            size = object@size,
+                            internalPos = object@internalPos)
               return(object)
             }
-  if (is(try(validObject(object@seqinfo, complete = TRUE), 
-             silent=TRUE), "try-error")) {
-    object@seqinfo <- updateObject(object@seqinfo)
-    return(object)
-  }
-  object
-})
+            if (is(try(validObject(object@seqinfo, complete = TRUE), 
+                       silent=TRUE), "try-error")) {
+              object@seqinfo <- updateObject(object@seqinfo)
+              return(object)
+            }
+            object
+          }
+)
 
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ### Coercion
 ###
 
-# TODO: Works interactively but not as a method
-setMethod("as.data.frame", "GTuples", function(x, row.names = NULL, 
-                                               optional = FALSE, ...) {
-  tuples <- tuples(x)
-  colnames(tuples) <- paste0('pos', seq_len(size(x)))
-  if (missing(row.names)) {
-    row.names <- names(x)
-  }
-  if (!is.null(names(x))) {
-    names(x) <- NULL
-  }
-  mcols_df <- as.data.frame(mcols(x), ...)
-  data.frame(seqnames = as.factor(seqnames(x)),
-             tuples,
-             strand = as.factor(strand(x)),
-             mcols_df,
-             row.names = row.names,
-             stringsAsFactors = FALSE)
-})
 
 #' @export
-setMethod("granges", "GTuples",
+setMethod("granges", 
+          "GTuples",
           function(x, use.mcols = FALSE) {
             callNextMethod()
           }
 )
-
-# TODO: coercion of data.frame and DataFrame to GTuples. This will be useful 
-# when creating MethPat objects.
 
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ### Updating and cloning.
@@ -231,7 +208,7 @@ setMethod("granges", "GTuples",
   ans_seqnames <- do.call(c, lapply(x, seqnames))
   ans_ranges <- do.call(c, lapply(x, ranges))
   ans_strand <- do.call(c, lapply(x, strand))
-  ans_internalPos <- do.call(rbind, lapply(x, function(xx){
+  ans_internalPos <- do.call(rbind, lapply(x, function(xx) {
     xx@internalPos
   }))
   ans_size <- sapply(x, size)[1]
@@ -276,21 +253,24 @@ setMethod("size", "GTuples", function(x) {
 # TODO: Examples
 #' @include AllGenerics.R
 #' @export
-setMethod("tuples", "GTuples", function(x, use.mcols = FALSE) {
-  if (use.mcols) {
-    stop("Sorry, only use.mcols = FALSE is currently supported.")
+setMethod("tuples", 
+          "GTuples", 
+          function(x, use.mcols = FALSE) {
+            if (use.mcols) {
+              stop("Sorry, only use.mcols = FALSE is currently supported.")
+            }
+            if (!isTRUEorFALSE(use.mcols)) {
+              stop("'use.mcols' must be TRUE or FALSE")
+            }
+            if (is.na(size(x))) {
+              ans <- matrix()
+            } else if (size(x) == 1L) {
+              ans <- as.matrix(start(x))
+              colnames(ans) <- paste0('pos', seq_len(size(x)))
+            } else{
+              ans <- cbind(start(x), x@internalPos, end(x))
+              colnames(ans) <- paste0('pos', seq_len(size(x)))
   }
-  if (!isTRUEorFALSE(use.mcols)) {
-    stop("'use.mcols' must be TRUE or FALSE")
-  }
-  if (is.na(size(x))) {
-    ans <- matrix()
-  } else if (size(x) == 1L) {
-    ans <- as.matrix(start(x))
-  } else{
-    ans <- cbind(start(x), as.matrix(x@internalPos), end(x))
-  }
-  
   return(ans)
 })
 
@@ -318,7 +298,7 @@ setMethod("split", "GTuples", function(x, f, drop = FALSE, ...) {
   elementMetadata_split <- split(elementMetadata(x), f)
   metadata_split <- split(metadata(x), f)
   if (isTRUE(size(x) > 2)) {
-    internalPos_split <- split(x@internalPos, f)
+    internalPos_split <- split.data.frame(x@internalPos, f)
   } else{
     internalPos_split <- vector(mode = "list", length = length(seqnames_split))
   }
@@ -363,7 +343,7 @@ setReplaceMethod("tuples", "GTuples", function(x, value) {
     x
   } else if (m > 2L) {
     start(x) <- value[, 1]
-    x@internalPos <- DataFrame(value[, seq.int(2, m - 1, 1)])
+    x@internalPos <- value[, seq.int(2, m - 1, 1)]
     end(x) <- value[, m]
     x
   }
@@ -431,24 +411,22 @@ setMethod(GenomicRanges:::extraColumnSlotNames, "GTuples",
       ans <- cbind(as.character(x@seqnames), x@ranges@start, 
                    x@ranges@start + x@ranges@width - 1, as.character(x@strand))
     } else {
-      # TODO: as.matrix(x@internalPos) doesn't work for some reason.
       ans <- cbind(as.character(x@seqnames), x@ranges@start, 
-                   matrix(unlist(x@internalPos), ncol = x@size - 2),
-                   x@ranges@start + x@ranges@width - 1, as.character(x@strand))
+                   x@internalPos, x@ranges@start + x@ranges@width - 1, 
+                   as.character(x@strand))
     }
     colnames(ans) <- c("seqnames", paste0('pos', seq_len(x@size)), "strand")
   } else{
     ans <- cbind(as.character(x@seqnames), as.character(x@strand))
     colnames(ans) <- c("seqnames", "strand")
   }
-  
-  ## This code is commented out because otherwise it will repeat the 
-  ## internalPos field in the output
-  #extraColumnNames <- GenomicRanges:::extraColumnSlotNames(x)
-  #  if (length(extraColumnNames) > 0L) {
-  #      ans <- do.call(cbind, c(list(ans), lapply(GenomicRanges:::extraColumnSlots(x), 
-  #          showAsCell)))
-  #  }
+  extraColumnNames <- GenomicRanges:::extraColumnSlotNames(x)
+  extraColumnNames <- extraColumnNames[extraColumnNames != "internalPos"]
+  if (length(extraColumnNames) > 0L) {
+    ans <- do.call(cbind, c(list(ans), 
+                            lapply(GenomicRanges:::extraColumnSlots(x), 
+                                   showAsCell)))
+  }
   if (nc > 0L) {
     tmp <- do.call(data.frame, c(lapply(mcols(x), S4Vectors:::showAsCell), 
                                  list(check.names = FALSE)))
