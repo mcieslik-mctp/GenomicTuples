@@ -448,7 +448,7 @@ setMethod(GenomicRanges:::extraColumnSlotNames,
                                    showAsCell)))
   }
   if (nc > 0L) {
-    tmp <- do.call(data.frame, c(lapply(mcols(x), S4Vectors:::showAsCell), 
+    tmp <- do.call(data.frame, c(lapply(mcols(x), S4Vectors::showAsCell), 
                                  list(check.names = FALSE)))
     ans <- cbind(ans, `|` = rep.int("|", lx), as.matrix(tmp))
   }

@@ -161,7 +161,7 @@ setMethod("==",
   if (method == "base") {
     # base::duplicated.array is slow for large matrices.
     val <- duplicated.array(mat, incomparables = incomparables, MARGIN = 1, 
-                            fromLast = fromLast, ...)
+                            fromLast = fromLast)
   } else {
     # Create a hash of each row of mat by computing the inner product of mat 
     # with a vector of prime numbers.

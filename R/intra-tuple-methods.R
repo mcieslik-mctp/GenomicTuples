@@ -173,7 +173,7 @@ setMethod("restrict",
 setMethod("Ops", 
           c("GTuples", "numeric"),
           function(e1, e2) {
-            stop(paste0(class(x), " do not currently support the 'zoom' ", 
+            stop(paste0(class(e1), " do not currently support the 'zoom' ", 
                         "method."))
           }
 )
