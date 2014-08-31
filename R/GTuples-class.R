@@ -190,7 +190,12 @@ setMethod("as.data.frame",
             extraColumnNames <- extraColumnNames[extraColumnNames != 
                                                    'internalPos']
             if (length(extraColumnNames) > 0L) {
-              mcols_df <- cbind(as.data.frame(extraColumnSlotsAsDF, ...), 
+              extraColumns <- GenomicRanges:::extraColumnSlotsAsDF(x)
+              # Remove the internalPos slot from extraColumns to prevent it 
+              # being twice-included.
+              extraColumns <- extraColumns[colnames(extraColumns) != 
+                                             'internalPos']
+              mcols_df <- cbind(as.data.frame(extraColumns, ...), 
                                 mcols_df)
             }
             # TODO: S4 dispatch seems to be going awry so I have to force
