@@ -311,7 +311,7 @@ setReplaceMethod("tuples",
                    }
                    mode(value) <- "integer"
                    n <- length(x)
-                   k <- length(value)
+                   k <- nrow(value)
                    if (k != n) {
                      stop(k, " elements in value to replace ", n, " elements")
                    }
@@ -329,9 +329,13 @@ setReplaceMethod("tuples",
                      ranges(x) <- value
                      x
                    } else if (m > 2L) {
-                     start(x) <- value[, 1]
-                     x@internalPos <- value[, seq.int(2, m - 1, 1)]
-                     end(x) <- value[, m]
+                     # Set internalPos first because setting ranges triggers a
+                     # call to validObject, which may return FALSE because the 
+                     # internalPos haven't yet been updated and so may be 
+                     # (temporarily) invalid.
+                     x@internalPos <- value[, seq.int(2, m - 1, 1), 
+                                            drop = FALSE]
+                     ranges(x) <- IRanges(start = value[, 1], end = value[, m])
                      x
                    }
                  }
