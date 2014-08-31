@@ -285,41 +285,8 @@ setMethod("c",
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ### Getters
 ###
-# TODO: Examples in GTuples-class.Rd
 
-#' @include AllGenerics.R
-#' @export
-setMethod("size", 
-          "GTuples", 
-          function(x) {
-            x@size
-          }
-)
-
-# TODO: Examples in GTuples-class.Rd
-#' @include AllGenerics.R
-#' @export
-setMethod("tuples", 
-          "GTuples", 
-          function(x, use.mcols = FALSE) {
-            if (use.mcols) {
-              stop("Sorry, only use.mcols = FALSE is currently supported.")
-            }
-            if (!isTRUEorFALSE(use.mcols)) {
-              stop("'use.mcols' must be TRUE or FALSE")
-            }
-            if (is.na(size(x))) {
-              ans <- matrix()
-            } else if (size(x) == 1L) {
-              ans <- as.matrix(start(x))
-              colnames(ans) <- paste0('pos', seq_len(size(x)))
-            } else{
-              ans <- cbind(start(x), x@internalPos, end(x))
-              colnames(ans) <- paste0('pos', seq_len(size(x)))
-            }
-            return(ans)
-          }
-)
+# Implemented in Tuples methods and Utilities
 
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ### Splitting
@@ -369,8 +336,40 @@ setReplaceMethod("tuples",
 ### Tuples methods
 ###
 
-# TODO
+# TODO: Examples in GTuples-class.Rd
+#' @include AllGenerics.R
+#' @export
+setMethod("size", 
+          "GTuples", 
+          function(x) {
+            x@size
+          }
+)
 
+# TODO: Examples in GTuples-class.Rd
+#' @include AllGenerics.R
+#' @export
+setMethod("tuples", 
+          "GTuples", 
+          function(x, use.mcols = FALSE) {
+            if (use.mcols) {
+              stop("Sorry, only use.mcols = FALSE is currently supported.")
+            }
+            if (!isTRUEorFALSE(use.mcols)) {
+              stop("'use.mcols' must be TRUE or FALSE")
+            }
+            if (is.na(size(x))) {
+              ans <- matrix()
+            } else if (size(x) == 1L) {
+              ans <- as.matrix(start(x))
+              colnames(ans) <- paste0('pos', seq_len(size(x)))
+            } else{
+              ans <- cbind(start(x), x@internalPos, end(x))
+              colnames(ans) <- paste0('pos', seq_len(size(x)))
+            }
+            return(ans)
+          }
+)
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ### Utilities
 ###
@@ -398,14 +397,11 @@ setMethod("IPD",
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ### Subsetting
 ###
-# TODO: Test the subsetting methods defined in GenomicRanges-class.R
 
-# TODO: Should I explicitly define this via callNextMethod() 
-# extractROWS works via inheritance because it handles extraColumnSlots 
-# (internalPos)
+# extractROWS, "[", replaceROWS and "[<-" defined via inheritance to methods 
+# for GenomicRanges.
 
-# TODO: Should I explicitly define this via callNextMethod()
-# "[" works via inheritance because it calls extractROWS
+# TODO: Should I explicitly define these via callNextMethod()
 
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ### Show
@@ -475,7 +471,7 @@ showGTuples <- function(x, margin = "", with.classinfo = FALSE,
   }
   
   out <- S4Vectors:::makePrettyMatrixForCompactPrinting(x, .makeNakedMatFromGTuples)
-  # TODO: Try to implement
+  # TODO: Try to implement, although low priority.
   ## These lines commented out because classinfo is more complicated for GTuples 
   ## objects than GRanges objects. For example, some of the `pos` information 
   ## is stored in an IRanges object while some is stored in a matrix.
