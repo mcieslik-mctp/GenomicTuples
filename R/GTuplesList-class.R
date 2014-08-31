@@ -104,16 +104,31 @@ setMethod("size",
           }
 )
 
-# TODO: tuples, tuples<-
+# TODO: tuples<-
+setMethod("tuples",
+          "GTuplesList",
+          function(x) {
+            unlisted_x <- unlist(x, use.names = FALSE)
+            unlisted_ans <- tuples(unlisted_x)
+            ans <- relist(unlisted_ans, x)
+            ans
+          }
+)
 
-# TODO: None at this point. Coercion to DataFrameList might be useful.
+setReplaceMethod("tuples", 
+                 "GTuplesList",
+                 function(x, value) {
+                   tuples(x@unlistData) <- unlist(value, use.names = FALSE)
+                   x
+                 }
+)
 
 
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ### Coercion.
 ###
 
-# TODO: Does c(gtl, gtl)  correctly deal with size and internalPos slots?
+# as.data.frame and as.list work via inheritance to GRangesList
 # TODO: grglist when method is implemented in GenomicRanges
 
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
