@@ -50,7 +50,7 @@ setMethod("shift",
             }
             ranges(x@unlistData) <-
               shift(x@unlistData@ranges, shift, use.names = use.names)
-              x@unlistData@internalPos <- x@unlistData@internalPos + shift
+            x@unlistData@internalPos <- x@unlistData@internalPos + shift
             x
           }
 )
