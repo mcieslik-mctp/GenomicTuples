@@ -81,8 +81,8 @@ Requires: BiocGenerics, IRanges, S4Vectors
 
 Package: GenomicRanges
 Source: Bioconductor
-Version: 1.17.35
-Hash: c706a6feecb1020dac6cdec349322583
+Version: 1.17.28
+Hash: 72cc98d2b14ac7ff3c97f07c73fda099
 Requires: BiocGenerics, GenomeInfoDb, IRanges, S4Vectors, XVector
 
 Package: highr
@@ -104,8 +104,8 @@ Requires: digest, jsonlite, RCurl, stringr
 
 Package: IRanges
 Source: Bioconductor
-Version: 1.99.24
-Hash: 08c1325636ae1f7d46384530e8d9025d
+Version: 1.99.25
+Hash: 99205fcfdc64e4d6811d6800e8afae1f
 Requires: BiocGenerics, S4Vectors
 
 Package: jsonlite
@@ -190,8 +190,8 @@ Hash: 5bd4449a873ec652a05c932312dcf04b
 
 Package: S4Vectors
 Source: Bioconductor
-Version: 0.1.2
-Hash: 7cf4fe95fa86dca787f8ebb368b69470
+Version: 0.1.3
+Hash: 4b0b8b1b333929ab7b597b6384072a9a
 Requires: BiocGenerics
 
 Package: stringr
@@ -213,7 +213,7 @@ Hash: 186ab2937fec1694c8a63009a2389c4e
 Package: XVector
 Source: Bioconductor
 Version: 0.5.7
-Hash: e94d1c9e6aa1225a255945b4890a38f2
+Hash: 6e7ff6f7d01c124a6ae322fcbeaa2c90
 Requires: BiocGenerics, IRanges, S4Vectors
 
 Package: yaml
