@@ -21,7 +21,7 @@ setGeneric("IPD", function(x) {
 ###
 
 #' @export
-setGeneric("tuples", function(x, use.mcols = FALSE) {
+setGeneric("tuples", function(x) {
   standardGeneric("tuples")
 })
 

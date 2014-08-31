@@ -351,13 +351,7 @@ setMethod("size",
 #' @export
 setMethod("tuples", 
           "GTuples", 
-          function(x, use.mcols = FALSE) {
-            if (use.mcols) {
-              stop("Sorry, only use.mcols = FALSE is currently supported.")
-            }
-            if (!isTRUEorFALSE(use.mcols)) {
-              stop("'use.mcols' must be TRUE or FALSE")
-            }
+          function(x) {
             if (is.na(size(x))) {
               ans <- matrix()
             } else if (size(x) == 1L) {
