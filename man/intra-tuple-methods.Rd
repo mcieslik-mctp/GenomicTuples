@@ -60,10 +60,6 @@ use.names = TRUE)
   \item{shift, use.names, start, end, width}{
     See \code{?`\link[IRanges]{intra-range-methods}`}.
   }
-  \item{ignore.strand}{
-    \code{TRUE} or \code{FALSE}. Whether the strand of the input tuples
-    should be ignored or not. See details below.
-  }
   \item{\dots}{
     Additional arguments to methods.
   }

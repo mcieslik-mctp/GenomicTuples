@@ -45,6 +45,7 @@
 \alias{width,GTuples-method}
 \alias{width<-,GTuples-method}
 \alias{IPD,GTuples-method}
+\alias{size,GTuples-method}
 
 % Vector methods:
 \alias{length,GTuples-method}
@@ -87,14 +88,14 @@
   \item{\code{strand}}{a \code{\link[S4Vectors]{Rle}} Rle object containing
   the strand information.}
 
-  \item{\code{mcols}}{a \code{\link[GenomicRanges]{DataFrame}} object
+  \item{\code{mcols}}{a \code{\link[IRanges]{DataFrame}} object
   containing the metadata columns. Columns cannot be named "\code{seqnames}"
   "\code{ranges}", "\code{tuples}", "\code{internalPos}", "\code{size}", 
   "\code{strand}", "\code{seqlevels}", "\code{seqlengths}", 
   "\code{isCircular}", "\code{start}", "\code{end}", "\code{width}", or 
   "\code{element}".}
 
-  \item{\code{seqinfo}}{a \code{\link[GenomicRanges]{Seqinfo}} object
+  \item{\code{seqinfo}}{a \code{\link[IRanges]{DataFrame}} object
   containing information about the set of genomic sequences present in the
   \code{GTuples} object.}
   }
@@ -144,7 +145,7 @@
        names and containing the lengths (or \code{NA}) for each
        \code{level(seqnames)}.}
 
-       \item{\code{seqinfo}}{a \code{\link[GenomicRanges]{Seqinfo}} object
+       \item{\code{seqinfo}}{a \code{\link[GenomeInfoDb]{DataFrame}} object
        containing allowed sequence names and lengths (or \code{NA}) for each
        \code{level(seqnames)}.}
        }
@@ -195,13 +196,15 @@
    }
    
    \item{}{
-    \code{tuples(x)}: Get the positions of the tuples, which are returned as 
-    an integer matrix.
+    \code{tuples(x)}, \code{tuples(x) <- value}: Get the positions of the 
+    tuples, which are returned as an integer matrix. \code{value} can be an
+    integer matrix.
    }
 
    \item{}{
-    \code{ranges(x)}, \code{ranges(x) <- value}: Get or set the ranges in the 
-    form of a CompressedIRangesList. \code{value} can be a RangesList object.
+    \code{ranges(x, use.mcols = FALSE)}, \code{ranges(x) <- value}: Get or set 
+    the ranges in the form of a CompressedIRangesList. \code{value} can be a 
+    RangesList object.
     
     \strong{WARNING}: The use of \code{ranges} with \code{GTuples} objects is 
     \strong{strongly} discouraged. It will only get/set \eqn{pos_{1}} and 
@@ -225,10 +228,10 @@
     \code{mcols(x, use.names=FALSE)}, \code{mcols(x) <- value}: Get
     or set the metadata columns. If \code{use.names=TRUE} and the metadata
     columns are not \code{NULL}, then the names of \code{x} are propagated as
-    the row names of the returned \code{\link[GenomicRanges]{DataFrame}}
+    the row names of the returned \code{\link[IRanges]{DataFrame}}
     object. When setting the metadata columns, the supplied value must be
     \code{NULL} or a data.frame-like object (i.e.
-    \code{\link[IRanges]{DataTable}} or \code{\link[base]{data.frame}})
+    \code{\link[S4Vectors]{DataTable}} or \code{\link[base]{data.frame}})
     object holding element-wise metadata.
    }
 
@@ -241,7 +244,7 @@
    \item{}{
     \code{seqinfo(x)}, \code{seqinfo(x) <- value}: Get or set the
     information about the underlying sequences. \code{value} must be a
-    \code{\link[GenomicRanges]{Seqinfo}} object.
+    \code{\link[GenomeInfoDb]{DataFrame}} object.
    }
 
    \item{}{
@@ -250,7 +253,7 @@
     \code{seqlevels(seqinfo(x))} or to \code{levels(seqnames(x))}, those 2
     expressions being guaranteed to return identical character vectors on a
     \code{GTuples} object. \code{value} must be a character vector with no
-    \code{NA}s. See \code{?}\code{\link[GenomicRanges]{seqlevels}} for more
+    \code{NA}s. See \code{?}\code{\link[GenomeInfoDb]{seqlevels}} for more
     information.
    }
 
@@ -351,8 +354,8 @@
    \item{}{
     \code{c(x, ..., ignore.mcols=FALSE)} If the \code{GTuples}
     objects have metadata columns (represented as one
-    \code{\link[GenomicRanges]{DataFrame}} per object), each such
-    \code{\link[GenomicRanges]{DataFrame}} must have the same columns in
+    \code{\link[IRanges]{DataFrame}} per object), each such
+    \code{\link[IRanges]{DataFrame}} must have the same columns in
     order to combine successfully. In order to circumvent this restraint, you
     can pass in an \code{ignore.mcols=TRUE} argument which will combine all
     the objects into one and drop all of their metadata columns.
@@ -488,8 +491,6 @@
   \link[IRanges]{DataFrame-class},
   \link[GenomicRanges]{GRanges-class},
   \link[GenomicTuples]{intra-tuple-methods},
-  \link[GenomicTuples]{inter-tuple-methods},
-  \link[GenomicTuples]{setops-methods},
   \link[GenomicTuples]{findOverlaps-methods},
   \link[GenomicTuples]{nearest-methods},
   %\link[GenomicTuples]{coverage-methods}

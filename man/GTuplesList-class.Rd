@@ -20,8 +20,8 @@
 %\alias{ranges,GTuplesList-method}
 %\alias{ranges<-,GTuplesList-method}
 \alias{strand,GTuplesList-method}
-%\alias{strand<-,GTuplesList,ANY-method}
-%\alias{strand<-,GTuplesList,character-method}
+\alias{strand<-,GTuplesList,ANY-method}
+\alias{strand<-,GTuplesList,character-method}
 \alias{elementMetadata,GTuplesList-method}
 \alias{elementMetadata<-,GTuplesList-method}
 \alias{seqinfo,GTuplesList-method}
@@ -35,17 +35,19 @@
 %\alias{coerce,GTuplesList,IRangesList-method}
 %\alias{coerce,GTuplesList,RangesList-method}
 %\alias{coerce,RangedDataList,GTuplesList-method}
+\alias{coerce,GTuplesList,data.frame-method}
+\alias{coerce,GTuplesList,list-method}
 
 % TODO: Document these once implemented
 % Tuples methods:
-%\alias{tuples,GTuplesList-method}
-%\alias{tuples<-,GTuplesList-method}
-%\alias{start,GTuplesList-method}
-%\alias{start<-,GTuplesList-method}
-%\alias{end,GTuplesList-method}
-%\alias{end<-,GTuplesList-method}
-%\alias{width,GTuplesList-method}
-%\alias{width<-,GTuplesList-method}
+\alias{tuples,GTuplesList-method}
+\alias{tuples<-,GTuplesList-method}
+\alias{start,GTuplesList-method}
+\alias{start<-,GTuplesList-method}
+\alias{end,GTuplesList-method}
+\alias{end<-,GTuplesList-method}
+\alias{width,GTuplesList-method}
+\alias{width<-,GTuplesList-method}
 
 % Subsetting:
 \alias{[,GTuplesList,ANY-method}
@@ -107,16 +109,18 @@
       \code{\link[IRanges]{RleList}} or \code{\link[IRanges]{CharacterList}} 
       object.
     }
-    % TODO: tuples,GTuplesList method
-%    \item{}{
-%      \code{ranges(x, use.mcols=FALSE)}, \code{ranges(x) <- value}:
-%      Get or set the ranges in the form of a CompressedIRangesList.
-%      \code{value} can be a RangesList object.
-%    }
+    % TODO: Document tuples<- method
+    % TODO: What can value be? A matrix or a SimpleList of matrices
     \item{}{
-      \code{ranges(x)}, \code{ranges(x) <- value}: Get or set the ranges in the 
-      form of a \code{\link[IRanges]{CompressedIRangesList}}. \code{value} can
-      be a \code{\link[IRanges]{RangesList}} object.
+      \code{tuples(x)}, \code{tuples(x) <- value}:
+      Get or set the tuples in the form of a SimpleList.
+      \code{value} can be a SimpleList of integer matrices.
+    }
+    \item{}{
+      \code{ranges(x, use.mcols = FALSE)}, \code{ranges(x) <- value}: Get or 
+      set the ranges in the form of a 
+      \code{\link[IRanges]{CompressedIRangesList}}. \code{value} can be a 
+      \code{\link[IRanges]{RangesList}} object.
       
       \strong{WARNING}: The use of \code{ranges} with \code{GTuplesList} 
       objects is \strong{strongly} discouraged. It will only get/set 
@@ -138,7 +142,7 @@
       \code{mcols(x, use.names=FALSE)}, \code{mcols(x) <- value}:
       Get or set the metadata columns.
       \code{value} can be \code{NULL}, or a data.frame-like object (i.e.
-      \code{\link[GenomicRanges]{DataFrame}} or data.frame) holding 
+      \code{\link[IRanges]{DataFrame}} or data.frame) holding 
       element-wise metadata.
     }
     \item{}{
@@ -158,7 +162,7 @@
       or to \code{levels(seqnames(x))}, those 2 expressions being
       guaranteed to return identical character vectors on a \code{GTuplesList}
       object. \code{value} must be a character vector with no NAs.
-      See \code{?\link[GenomicRanges]{seqlevels}} for more information.
+      See \code{?\link[GenomeInfoDb]{seqlevels}} for more information.
     }
     \item{}{
       \code{seqlengths(x)}, \code{seqlengths(x) <- value}:
@@ -236,10 +240,22 @@
   }
 }
 
-% TODO: Decide what coercion methods are allowed.
-%\section{Coercion}{
-%  
-%}
+\section{Coercion}{
+    In the code snippets below, \code{x} is a GTuplesList object.
+
+  \describe{
+    \item{}{
+      \code{as.data.frame(x, row.names = NULL, optional = FALSE,
+         ..., value.name = "value", use.outer.mcols = FALSE, 
+         group_name.as.factor = FALSE)}: 
+      Coerces \code{x} to a \code{data.frame}. See as.data.frame on the 
+      \code{List} man page for details (?\code{List}). 
+    }
+    \item{}{\code{as.list(x, use.names = TRUE)}:
+      Creates a list containing the elements of \code{x}.
+    }
+  }
+}
 
 \section{Subsetting}{
   In the following code snippets, \code{x} is a \code{GTuplesList} object.

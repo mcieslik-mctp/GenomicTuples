@@ -42,8 +42,8 @@
 ## match()
 ## -------
 
-\S4method{match}{GTuples,GTuples}(x, table, nomatch=NA_integer_, 
-      incomparables = NULL, method = c("auto"), ignore.strand = FALSE)
+\S4method{match}{GTuples,GTuples}(x, table, nomatch = NA_integer_, 
+      incomparables = NULL, ignore.strand = FALSE)
 
 ## order() and related methods
 ## -----------------------------------------------------------------------------
