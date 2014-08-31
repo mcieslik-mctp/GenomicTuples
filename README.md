@@ -11,7 +11,7 @@ __This package is in early development and requires the use of the development v
 ```R
 source("http://bioconductor.org/biocLite.R")
 useDevel()
-biocLite(c('BiocGenerics', 'IRanges', 'Rcpp', 'Biobase', 'GenomicRanges', 'S4Vectors', 'GenomeInfoDb', 'testthat', 'knitr'))
+biocLite(c('Rcpp', 'GenomicRanges', 'Biobase', 'testthat', 'knitr'))
 devtools::install_github("PeteHaitch/GenomicTuples")
 ```
 
