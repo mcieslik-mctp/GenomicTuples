@@ -13,6 +13,7 @@
 #' @useDynLib GenomicTuples
 #' @import GenomicRanges
 #' @import Rcpp
+#' @import methods
 #' @importFrom Biobase validMsg
 #' @references TODO
 NULL
