@@ -12,10 +12,8 @@
 ### ---------------------------------------------------
 ### The "natural order" for the elements of a GTuples object is to order
 ### them (a) first by sequence level, (b) then by strand, (c) then by pos_{1}, 
-### ..., pos_{m}. This way, the space of genomic ranges is totally ordered.
-### TODO (CHECK): Note that the "reduce" method for GTuples uses this "natural order"
-### implicitly. 
-### order(), sort(), and rank() on a GenomicRanges object are using this
+### ..., pos_{m}. This way, the space of genomic tuples is totally ordered.
+### order(), sort(), and rank() on a GTuples object are using this
 ### "natural order".
 ###
 ### III. ELEMENT-WISE (AKA "PARALLEL") COMPARISON OF 2 GTuples OBJECTS
@@ -28,7 +26,7 @@
 ###   (A) 'e1' and 'e2' have compatible sets of underlying sequences, that is,
 ###       'seqinfo(e1)' and 'seqinfo(e2)' can be merged.
 ###   (B) 'seqlevels(e1)' and 'seqlevels(e2)' are in the same order. Note that
-###       (A) guarantees that the seqlevels of one is a subset of the seqlevels
+###       (A) guarantees that the seqlevels of one is a subset of the seqlevels 
 ###       of the other. (B) is saying that this subset should be a subsequence.
 ### Pre-comparison step: if (A) and (B) are satisfied, then the 2 seqinfo() are
 ### merged and the seqlevels() of the result is assigned back to each object
@@ -149,7 +147,7 @@ setMethod("==",
   }
   
   method <- match.arg(method)
-   
+  
   # Store tuples as integer matrix
   if (size(x) == 1L) { 
     mat <- c(as.integer(seqnames(x)), as.integer(strand(x)), start(x))
@@ -163,7 +161,7 @@ setMethod("==",
   if (method == "base") {
     # base::duplicated.array is slow for large matrices.
     val <- duplicated.array(mat, incomparables = incomparables, MARGIN = 1, 
-                      fromLast = fromLast, ...)
+                            fromLast = fromLast, ...)
   } else {
     # Create a hash of each row of mat by computing the inner product of mat 
     # with a vector of prime numbers.
@@ -210,7 +208,8 @@ duplicated.GTuples <- function(x, incomparables = FALSE, ...) {
 #' @export
 setMethod("duplicated", 
           "GTuples", 
-          .duplicated.GTuples)
+          .duplicated.GTuples
+)
 
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ### match()
@@ -218,10 +217,7 @@ setMethod("duplicated",
 ### %in%, findMatches(), countMatches() will work out-of-the-box on GTuples 
 ### objects thanks to the method for Vector objects.
 
-## TODO: Required findOverlaps,GTuples,GTuples method to be defined
-## TOOD: Document 'method' argument
-
-## Loosely based on 'match' method for GenomicRanges objects
+# Effectively just calls findOverlaps with type = equal.
 #' @export
 setMethod("match", 
           c("GTuples", "GTuples"), 
@@ -254,10 +250,8 @@ setMethod("match",
 ###
 ### The order() and rank() methods for GTuples objects are consistent with the 
 ### order implied by compare().
-### sort() is defined separately, rather than simply inherited from GRanges,
-### because it does not use the `by` argument.
+### sort is defined via inheritance to GRanges
 
-# Loosely based on 'order' method for GRanges
 #' @export
 setMethod(order, 
           "GTuples", 
@@ -277,25 +271,37 @@ setMethod(order,
               size <- size[1]
             }
             
-            if (size < 3){
+            if (size < 3L){
               # If size < 3 just defer to the order method defined for GRanges
               # Can't simply use callNextMethod() because (oddly) there is no 
               # order method defined for GRanges (rather it is defined for 
               # GenomicRanges).
               order(do.call("c", lapply(args, function(x){as(x, "GRanges")})), 
                     na.last = na.last, decreasing = decreasing)
-            } else{
+            } else {
               # If size >= 3 then need to define an order method that takes 
               # note of the "internal positions in each tuple.
               order_args <- vector("list", (size + 2L) * length(args))
               idx <- (size + 2L) * seq_len(length(args))
               order_args[seq.int(from = 1, to = max(idx), by = size + 2)] <- 
                 lapply(args, function(x) {
-                  as.factor(seqnames(x))
+                  # TODO: S4 dispatch seems to be going awry so I have to force 
+                  # the conversion of seqnames(x) and strand(x) to factor.
+                  # This is done using the exact code called by 
+                  # as.factor,Rle-method.
+                  #as.factor(seqnames(x))
+                  rep.int(as.factor(runValue(seqnames(x))), 
+                          runLength(seqnames(x)))
                 })
               order_args[seq.int(from = 2, to = max(idx), by = size + 2)] <- 
                 lapply(args, function(x) {
-                  as.factor(strand(x))
+                  # TODO: S4 dispatch seems to be going awry so I have to force 
+                  # the conversion of seqnames(x) and strand(x) to factor.
+                  # This is done using the exact code called by 
+                  # as.factor,Rle-method.
+                  #as.factor(strand(x))
+                  rep.int(as.factor(runValue(strand(x))), 
+                          runLength(strand(x)))
                 })
               order_args[seq.int(from = 3, to = max(idx), by = size + 2)] <- 
                 lapply(args, start)
@@ -303,35 +309,11 @@ setMethod(order,
                            rep(seq(0, size - 3, by = 1))] <- 
                 lapply(args, function(x) {
                   x@internalPos
-                  })
+                })
               
               order_args[idx] <- lapply(args, function(x){end(x)})
               do.call(order, c(order_args, list(na.last = na.last, 
                                                 decreasing = decreasing)))
             }
-          }
-)
-
-# TODO: Add support for 'by' argument
-# Loosely based on 'sort' method for GRanges
-#' @export
-setMethod(sort, 
-          "GTuples", 
-          function(x, decreasing = FALSE, ignore.strand = FALSE, by) {
-            
-            if (!missing(by)) {
-              stop("Sorry, the 'by' argument is not yet supported.")
-            }
-            
-            if (!isTRUEorFALSE(ignore.strand)) {
-              stop("'ignore.strand' must be TRUE or FALSE")
-            }
-            if (ignore.strand) {
-              x2 <- unstrand(x)
-              i <- order(x2, decreasing = decreasing)
-            } else{
-              i <- order(x, decreasing = decreasing)
-            }
-            x[i, , drop = FALSE]
           }
 )
