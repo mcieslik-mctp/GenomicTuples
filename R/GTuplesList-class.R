@@ -174,7 +174,13 @@ setMethod("relistToClass",
 
 # TODO: Decide if I should support the with.classinfo argument?
 ## The show method is adapted from that of GRangesList
-showList <- function(object, showFunction, with.classinfo, ...) {
+showList <- function(object, showFunction, with.classinfo = FALSE, ...) {
+  # TODO: Try to implement 'with.classinfo', although low priority.
+  # Requires with.classinfo to work for show,GTuples-method
+  if (!identical(with.classinfo, FALSE)) {
+    stop("'with.classinfo' not implemented")
+  }
+  
   k <- length(object)
   cumsumN <- cumsum(elementLengths(object))
   N <- tail(cumsumN, 1)
@@ -193,10 +199,10 @@ showList <- function(object, showFunction, with.classinfo, ...) {
     }
     for (i in seq_len(k)) {
       cat(nms[i], "\n")
-      showFunction(object[[i]], margin="  ",
-                   with.classinfo = with.classinfo)
-      if (with.classinfo)
+      showFunction(object[[i]], margin="  ", with.classinfo = with.classinfo)
+      if (with.classinfo) {
         with.classinfo <- FALSE
+      }
       cat("\n")
     }
   } else {
