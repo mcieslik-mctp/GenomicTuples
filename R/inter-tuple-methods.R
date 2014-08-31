@@ -13,7 +13,7 @@
 ### isDisjoint()
 ### disjointBins()
 ###
-### TODO: I need to decide on any inter-tuple methods.
+### TODO: Are there any inter-tuple methods that make sense?
 
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ### range()
@@ -141,7 +141,7 @@ setMethod("disjointBins",
                         "'disjointBins' method."))
           }
 )
-  
+
 #' @export
 setMethod("disjointBins", 
           "GTuplesList", 

@@ -474,7 +474,7 @@ showGTuples <- function(x, margin = "", with.classinfo = FALSE,
   }
   
   out <- S4Vectors:::makePrettyMatrixForCompactPrinting(x, .makeNakedMatFromGTuples)
-  # TODO: Try to implement, although low priority.
+  # TODO: Try to implement 'with.classinfo', although low priority.
   ## These lines commented out because classinfo is more complicated for GTuples 
   ## objects than GRanges objects. For example, some of the `pos` information 
   ## is stored in an IRanges object while some is stored in a matrix.

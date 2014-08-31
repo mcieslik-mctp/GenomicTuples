@@ -2,6 +2,7 @@
 ### findOverlaps methods
 ### -------------------------------------------------------------------------
 
+# TODO: Support circular chromosomes, low priority.
 #' @export
 #' @keywords internal
 .findIdentical.GTuples <- function(query, subject, select, ignore.strand) {

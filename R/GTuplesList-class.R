@@ -70,7 +70,7 @@ GTuplesList <- function(...) {
     }
     unlistData <- suppressWarnings(do.call("c", unname(listData)))
   }
-
+  
   relist(unlistData, PartitioningByEnd(listData))
 }
 
@@ -145,14 +145,13 @@ setMethod("IPD",
           }
 )
 
-# TODO: stack (GenomicRangesList-class.R)
+# stack defined via inheritance to GRangesList
 
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ### Subsetting.
 ###
 
-# TODO: Won't be able to rely on subsetting method inherited from GRangesList 
-# because this will ignore 'size' and 'internalPos' slots.
+# "[", "[<-" and "[[<-" defined via inheritance to GRangesList
 
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ### Going from GRanges to GRangesList with extractList() and family.
@@ -165,8 +164,6 @@ setMethod("relistToClass",
             "GTuplesList"
           }
 )
-
-# TODO: splitAsListReturnedClass ?
 
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ### show method.
@@ -256,4 +253,7 @@ setMethod("show",
 ### For internal use only (not exported).
 ###
 
-# TODO: Required or can inherit from GRangesList?
+# Can use GenomicRanegs:::deconstructGRLintoGR and 
+# GenomicRanges:::reconstructGRLfromGR should these be required.
+# TODO: Test identical(reconstructGRLfromGR(deconstructGRLintoGR(x), x), x), 
+# where x is a GTuplesList

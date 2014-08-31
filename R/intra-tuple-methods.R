@@ -15,7 +15,12 @@
 ### trim()
 ### Zooming (symmetrically scales the width).
 ###
-### TODO: I need to decide on any inter-tuple methods.
+### Some of these methods could be defined for GTuples via inheritance but they 
+### would effectively just treat them as GRanges, which may not play nice with
+### the internalPos slot. But, and more importantly, it's not clear to me that 
+### these methods are sensible or necessary for intra-tuples; I'm happy to 
+### implement these if there is a good use case.
+### TODO: Are there any other intra-tuple methods that make sense?
 
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ### shift()
@@ -61,12 +66,6 @@ setMethod("shift",
 ### flank()
 ###
 
-# TODO: flank seems to be broken in BioC devel. 
-# TODO: Test and understand what it does, particularly with GTuples and 
-# GTuplesList objects.
-# TODO: Could define flank for GTuples and GTuplesList via inheritance from
-# GRanges and GRangesList but don't know if this really makes sense.
-
 #' @export
 setMethod("flank", 
           "GTuples", 
@@ -91,12 +90,6 @@ setMethod("flank",
 ### promoters()
 ###
 
-# TODO: promoters seems to be broken in BioC devel. 
-# TODO: Test and understand what it does, particularly with GTuples and 
-# GTuplesList objects.
-# TODO: Could define promoters for GTuples and GTuplesList via inheritance from
-# GRanges and GRangesList but don't know if this really makes sense.
-
 #' @export
 setMethod("promoters", 
           "GTuples", 
@@ -119,18 +112,12 @@ setMethod("promoters",
 ### reflect()
 ###
 
-### TODO: Add "reflect" method for GTuples objects once it's added for 
+### TODO: Investigate "reflect" method for GTuples objects once it's added for 
 ### GenomicRanges
 
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ### resize()
 ###
-
-# TODO: resize seems to be broken in BioC devel. 
-# TODO: Test and understand what it does, particularly with GTuples and 
-# GTuplesList objects.
-# TODO: Could define resize for GTuples and GTuplesList via inheritance from
-# GRanges and GRangesList but don't know if this really makes sense.
 
 #' @export
 setMethod("resize", 
@@ -146,8 +133,6 @@ setMethod("resize",
 ### restrict()
 ###
 
-# TODO: Could define restrict for GTuples and GTuplesList via inheritance from
-# GRanges and GRangesList but don't know if this really makes sense.
 #' @export
 setMethod("restrict", 
           "GenomicRanges",
