@@ -411,7 +411,7 @@ setMethod("IPD",
               stop("It does not make sense to compute IPD when size = 1.")
             } else if (isTRUE(size == 2L)) {
               ## width is not the same as distance ... at least for IRanges  
-              ipd <- matrix(width(x) - 1, ncol=1)
+              ipd <- matrix(width(x) - 1L, ncol=1)
             } else {
               ## TODO: use vectorized RCpp code, this is likely slower than vectorized R.  
               ipd <- .IPD(start(x), as.matrix(x@internalPos), end(x))

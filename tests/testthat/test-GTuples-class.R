@@ -317,14 +317,17 @@ test_that("size works", {
   expect_identical(size(gt4), 4L)
 })
 
-### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-### IPD
-###
 test_that("IPD works", {
-    expect_error(IPD(gt1))
-    expect_equal(IPD(gt2), matrix(1, nrow=10, ncol=1))
-    expect_equal(IPD(gt3), matrix(1, nrow=10, ncol=2))
+    expect_error(IPD(gt1), 
+                 "It does not make sense to compute IPD when size = 1.")
+    expect_identical(IPD(gt2), matrix(1L, nrow = 10, ncol = 1))
+    expect_identical(IPD(gt3), matrix(1L, nrow = 10, ncol = 2))
+    expect_identical(IPD(gt4), matrix(1L, nrow = 10, ncol = 3))
 })
+
+### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+### Subsetting
+###
 
 
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
