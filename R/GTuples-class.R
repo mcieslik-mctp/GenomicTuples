@@ -279,7 +279,8 @@ setMethod("c",
             } else {
               args <- unname(list(x, ...))
             }
-            if (!.zero_range(sapply(args, size))) {
+            if (!.zero_range(sapply(args, size)) && 
+                  !isTRUE(all(is.na(sapply(args, size))))) {
               stop("Cannot concatenate GTuples containing tuples of ", 
                    "different 'size'.")
             }
