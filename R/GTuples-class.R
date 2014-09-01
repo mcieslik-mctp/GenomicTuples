@@ -231,7 +231,18 @@ setMethod("as.data.frame",
 setMethod("granges", 
           "GTuples",
           function(x, use.mcols = FALSE) {
-            callNextMethod()
+            if (!isTRUEorFALSE(use.mcols)) {
+              stop("'use.mcols' must be TRUE or FALSE")
+            }
+            ans <- GRanges(seqnames(x), ranges(x), strand(x), 
+                           seqinfo = seqinfo(x))
+            if (use.mcols) {
+              extraColumns <- GenomicRanges:::extraColumnSlotsAsDF(x)
+              extraColumns <- extraColumns[colnames(extraColumns) != 
+                                             'internalPos']
+              mcols(ans) <- cbind(extraColumns, mcols(x))
+            }
+            ans
           }
 )
 
