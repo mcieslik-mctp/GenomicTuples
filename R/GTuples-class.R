@@ -99,10 +99,13 @@ GTuples <- function(seqnames = Rle(), tuples = matrix(),
   
   # Only need to check the tuples, all others get checked by the GRanges 
   # constructor
-  
-  # Check tuples
   if (!is.matrix(tuples)) {
     stop("'tuples' must be an integer matrix") 
+  }
+  # Don't want tuples to contain mix of NA and non-NA
+  NAs <- is.na(tuples)
+  if (sum(NAs) > 0 && sum(!NAs) > 0) {
+    stop("'NA' detected in 'tuples'")
   }
   if (!is.integer(tuples)) {
     if (!all(is.na(tuples))) {
