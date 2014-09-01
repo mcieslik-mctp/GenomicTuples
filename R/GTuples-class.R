@@ -302,6 +302,9 @@ setMethod("c",
             } else {
               args <- unname(list(x, ...))
             }
+            if (!isTRUE(all(sapply(args, inherits, "GTuples")))) {
+                stop("Cannot concatenate GTuples to other objects")
+            }
             if (!.zero_range(sapply(args, size)) && 
                   !isTRUE(all(is.na(sapply(args, size))))) {
               stop("Cannot concatenate GTuples containing tuples of ", 
@@ -407,11 +410,12 @@ setMethod("IPD",
             } else if (isTRUE(size == 1L)) {
               stop("It does not make sense to compute IPD when size = 1.")
             } else if (isTRUE(size == 2L)) {
-              ipd <- width(x)
+              ## width is not the same as distance ... at least for IRanges  
+              ipd <- matrix(width(x) - 1, ncol=1)
             } else {
-              ipd <- .IPD(start(x), as.matrix(x@internal_pos), end(x))
+              ## TODO: use vectorized RCpp code, this is likely slower than vectorized R.  
+              ipd <- .IPD(start(x), as.matrix(x@internalPos), end(x))
             }
-            
             return(ipd)
           }
 )

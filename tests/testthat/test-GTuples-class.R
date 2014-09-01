@@ -267,10 +267,37 @@ test_that("clone works", {
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ### Getters
 ###
+test_that("GRanges inherited getters work", {
+    expect_identical(seqnames(gt1), gt1@seqnames)
+    expect_identical(ranges(gt2), gt2@ranges)
+    expect_identical(strand(gt3), gt3@strand)
+    expect_identical(seqinfo(gt4), gt4@seqinfo)
+    expect_identical(seqinfo(gt4), gt4@seqinfo)
+})
 
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ### Splitting
 ###
+test_that("inherited split works", {
+    ## by integer
+    gt2_s = split(gt2, 1:10)
+    expect_equal(length(gt2_s), 10)
+    expect_true(inherits(gt2_s, class(gtl2)))
+    ## by Rle
+    gt2_s = split(gt2, seqnames(gt2))
+    expect_equal(length(gt2_s), 3)
+    expect_true(inherits(gt2_s, class(gtl2)))
+})
+
+### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+### Concatenating
+###
+test_that("concatenation works", {
+    expect_equal(c(gt3[1:5], gt3[6:10]), gt3)
+    expect_error(c(gt3, granges(gt3)))
+    expect_error(c(gt3, gt4))
+})
+
 
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ### Setters
@@ -291,14 +318,18 @@ test_that("size works", {
 })
 
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-### Subsetting
+### IPD
 ###
+test_that("IPD works", {
+    expect_error(IPD(gt1))
+    expect_equal(IPD(gt2), matrix(1, nrow=10, ncol=1))
+    expect_equal(IPD(gt3), matrix(1, nrow=10, ncol=2))
+})
+
 
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ### Show
 ###
-
-
 
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ### Combine and split
