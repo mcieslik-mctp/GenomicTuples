@@ -344,21 +344,19 @@ setReplaceMethod("tuples",
                    if (is.na(m)) {
                      x
                    } else if (m == 1L) {
-                     start(x) <- value
-                     x
+                     ranges <- IRanges(start = value[, 1], end = value[, 1])
+                     internalPos <- NULL
                    } else if (m == 2L) {
-                     ranges(x) <- value
-                     x
+                     ranges <- IRanges(start = value[, 1], end = value[, 2])
+                     internalPos <- NULL
                    } else if (m > 2L) {
-                     # Set internalPos first because setting ranges triggers a
-                     # call to validObject, which may return FALSE because the 
-                     # internalPos haven't yet been updated and so may be 
-                     # (temporarily) invalid.
-                     x@internalPos <- value[, seq.int(2, m - 1, 1), 
-                                            drop = FALSE]
-                     ranges(x) <- IRanges(start = value[, 1], end = value[, m])
-                     x
+                     ranges <- IRanges(start = value[, 1], end = value[, m])
+                     internalPos <- unname(value[, seq.int(from = 2, 
+                                                           to = m - 1, by = 1), 
+                                                 drop = FALSE])
                    }
+                   update(x, ranges = ranges, internalPos = internalPos,
+                          check = TRUE)
                  }
 )
 
