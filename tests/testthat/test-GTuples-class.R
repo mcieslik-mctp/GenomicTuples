@@ -297,7 +297,8 @@ test_that("concatenation works", {
     expect_error(c(gt3, granges(gt3)), 
                  "Cannot concatenate GTuples to other objects")
     expect_error(c(gt3, gt4), 
-                 "Cannot concatenate GTuples to other objects")
+                 paste0("Cannot concatenate GTuples containing tuples of ", 
+                        "different 'size'"))
 })
 
 
