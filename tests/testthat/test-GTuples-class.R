@@ -281,12 +281,12 @@ test_that("GRanges inherited getters work", {
 test_that("inherited split works", {
     ## by integer
     gt2_s = split(gt2, 1:10)
-    expect_equal(length(gt2_s), 10)
-    expect_true(inherits(gt2_s, class(gtl2)))
+    expect_identical(length(gt2_s), 10L)
+    expect_is(gt2_s, "GTuplesList")
     ## by Rle
     gt2_s = split(gt2, seqnames(gt2))
-    expect_equal(length(gt2_s), 3)
-    expect_true(inherits(gt2_s, class(gtl2)))
+    expect_identical(length(gt2_s), 3L)
+    expect_is(gt2_s, "GTuplesList")
 })
 
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -294,8 +294,10 @@ test_that("inherited split works", {
 ###
 test_that("concatenation works", {
     expect_equal(c(gt3[1:5], gt3[6:10]), gt3)
-    expect_error(c(gt3, granges(gt3)))
-    expect_error(c(gt3, gt4))
+    expect_error(c(gt3, granges(gt3)), 
+                 "Cannot concatenate GTuples to other objects")
+    expect_error(c(gt3, gt4), 
+                 "Cannot concatenate GTuples to other objects")
 })
 
 
