@@ -256,8 +256,11 @@ setMethod("granges",
 ### representation, these both map to initialize. Reference classes will want 
 ### to override 'update'. Other external representations need further 
 ### customization." Note, however, that these are not exported from 
-### GenomicRanges. I think I can safely use these for GTuples via inheritance
+### GenomicRanges. 
+###
+### I think I can safely use these for GTuples via inheritance
 ### to GenomicRanges, but should be careful whenever using them and test well.
+###
 
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ### Combining
