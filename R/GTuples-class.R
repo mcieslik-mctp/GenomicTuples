@@ -17,7 +17,7 @@ setClass("GTuples",
 )
 
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-### Validity.
+### Validity
 ###
 
 .valid.GTuples.pos <- function(object) {
@@ -25,7 +25,7 @@ setClass("GTuples",
   msg <- NULL
   
   # Check tuples are sorted; only required if m > 1.
-  if (isTRUE(object@size > 2) && length(object) != 0L) {
+  if (isTRUE(object@size > 2L) && length(object) != 0L) {
     if (!.allTuplesSorted(pos1 = object@ranges@start, 
                           internal_pos = object@internalPos, 
                           posm = object@ranges@start + 
@@ -35,8 +35,8 @@ setClass("GTuples",
                                   "'pos2'  < ...) < ", 
                                   paste0('pos', object@size)))
     }
-  } else if (isTRUE(object@size == 2)) {
-    if (isTRUE(any(object@ranges@width == 0))) {
+  } else if (isTRUE(object@size == 2L)) {
+    if (isTRUE(any(object@ranges@width <= 1L))) {
       msg <- validMsg(msg, 
                       paste0("positions in each tuple must be sorted in ", 
                              "strictly increasing order, i.e. 'pos1' < ", 
@@ -383,9 +383,6 @@ setMethod("tuples",
             return(ans)
           }
 )
-### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-### Utilities
-###
 
 #' @include AllGenerics.R
 #' @export
