@@ -308,6 +308,27 @@ test_that("clone works", {
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ### Combining
 ###
+context("Combining GTuples")
+
+test_that(".unlist_list_of_GTuples works", {
+  expect_identical(.unlist_list_of_GTuples(list(gt0)), gt0)
+  expect_identical(.unlist_list_of_GTuples(list(gt1)), gt1)
+  expect_identical(.unlist_list_of_GTuples(list(gt2)), gt2)
+  expect_identical(.unlist_list_of_GTuples(list(gt3)), gt3)
+  expect_identical(.unlist_list_of_GTuples(list(gt4)), gt4)
+})
+
+test_that("concatenation works", {
+  expect_identical(c(gt1[1:5], gt1[6:10]), gt1)
+  expect_identical(c(gt2[1:5], gt2[6:10]), gt2)
+  expect_identical(c(gt3[1:5], gt3[6:10]), gt3)
+  expect_identical(c(gt4[1:5], gt4[6:10]), gt4)
+  expect_error(c(gt3, granges(gt3)), 
+               "Cannot concatenate GTuples to other objects")
+  expect_error(c(gt3, gt4), 
+               paste0("Cannot concatenate GTuples containing tuples of ", 
+                      "different 'size'"))
+})
 
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ### Getters
@@ -334,16 +355,6 @@ test_that("inherited split works", {
     expect_is(gt2_s, "GTuplesList")
 })
 
-### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-### Concatenating
-###
-test_that("concatenation works", {
-    expect_equal(c(gt3[1:5], gt3[6:10]), gt3)
-    expect_error(c(gt3, granges(gt3)), 
-                 "Cannot concatenate GTuples to other objects")
-    expect_error(c(gt3, gt4), 
-                 paste0("Cannot concatenate GTuples containing tuples of ", 
-                        "different 'size'"))
 })
 
 
