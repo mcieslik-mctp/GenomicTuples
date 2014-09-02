@@ -207,22 +207,9 @@ setMethod("as.data.frame",
               mcols_df <- cbind(as.data.frame(extraColumns, ...), 
                                 mcols_df)
             }
-            # TODO: S4 dispatch seems to be going awry so I have to force
-            # the conversion of seqnames(x) and strand(x) to factor.
-            # This is done using the exact code called by as.factor,Rle-method
-#             data.frame(seqnames = as.factor(seqnames(x)), 
-#                        as.data.frame(tuples), strand = as.factor(strand(x)), 
-#                        mcols_df, row.names = row.names, 
-#                        stringsAsFactors = FALSE)
-            seqnames <- rep.int(as.factor(runValue(seqnames(x))), 
-                                runLength(seqnames(x)))
-            strand <- rep.int(as.factor(runValue(strand(x))), 
-                              runLength(strand(x)))
-            data.frame(seqnames = seqnames,
-                       as.data.frame(tuples),
-                       strand = strand,
-                       mcols_df,
-                       row.names = row.names,
+            data.frame(seqnames = as.factor(seqnames(x)), 
+                       as.data.frame(tuples), strand = as.factor(strand(x)), 
+                       mcols_df, row.names = row.names, 
                        stringsAsFactors = FALSE)
           }
 )
@@ -417,7 +404,6 @@ setMethod("IPD",
               ## width is not the same as distance ... at least for IRanges  
               ipd <- matrix(width(x) - 1L, ncol=1)
             } else {
-              ## TODO: use vectorized RCpp code, this is likely slower than vectorized R.  
               ipd <- .IPD(start(x), matrix(x@internalPos, ncol = size - 2), 
                           end(x))
             }

@@ -12,8 +12,11 @@
 #' @name GenomicTuples-package
 #' @useDynLib GenomicTuples
 #' @import GenomicRanges
+#' @import GenomeInfoDb
 #' @import Rcpp
 #' @import methods
+#' @import BiocGenerics
+#' @import S4Vectors
 #' @importFrom Biobase validMsg
 #' @references TODO
 NULL
