@@ -416,12 +416,12 @@ test_that("GRanges inherited getters work", {
   expect_identical(genome(gt1_), c('chr1' = 'foo', 'chr2' = 'foo', 
                                    'chr3' = 'foo'))
 })
-  
-  
+
+
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ### Tuples methods
 ###
-context("GTuples accessors")
+context("GTuples tuples methods")
 
 test_that("size works", {
   expect_identical(size(gt0), NA_integer_)
@@ -439,22 +439,62 @@ test_that("IPD works", {
   expect_identical(IPD(gt4), matrix(1L, nrow = 10, ncol = 3))
 })
 
+test_that("tuples works", {
+  expect_identical(tuples(gt0), matrix())
+  expect_identical(tuples(gt1), matrix(1:10, ncol = 1, 
+                                       dimnames = list(NULL, 'pos1')))
+  expect_identical(tuples(gt2), 
+                   matrix(c(1:10, 2:11), ncol = 2, 
+                          dimnames = list(NULL, c('pos1', 'pos2'))))
+  expect_identical(tuples(gt3), 
+                   matrix(c(1:10, 2:11, 3:12), ncol = 3, 
+                          dimnames = list(NULL, c('pos1', 'pos2', 'pos3'))))
+  expect_identical(tuples(gt4), 
+                   matrix(c(1:10, 2:11, 3:12, 4:13), ncol = 4, 
+                          dimnames = 
+                            list(NULL, c('pos1', 'pos2', 'pos3', 'pos4'))))
+})
+
+test_that("tuples<- works", {
+  tuples(gt1) <- matrix(101:110, ncol = 1)
+  expect_identical(tuples(gt1), 
+                   matrix(101:110, ncol = 1, dimnames = list(NULL, 'pos1')))
+  tuples(gt2) <- matrix(c(101:110, 102:111), ncol = 2)
+  expect_identical(tuples(gt2), 
+                   matrix(c(101:110, 102:111), ncol = 2, 
+                          dimnames = list(NULL, c('pos1', 'pos2'))))
+  tuples(gt3) <- matrix(c(101:110, 102:111, 103:112), ncol = 3)
+  expect_identical(tuples(gt3), 
+                   matrix(c(101:110, 102:111, 103:112), ncol = 3, 
+                          dimnames = list(NULL, c('pos1', 'pos2', 'pos3'))))
+  tuples(gt4) <- matrix(c(101:110, 102:111, 103:112, 104:113), ncol = 4)
+  expect_identical(tuples(gt4), 
+                   matrix(c(101:110, 102:111, 103:112, 104:113), ncol = 4, 
+                          dimnames = 
+                            list(NULL, c('pos1', 'pos2', 'pos3', 'pos4'))))
+})
+
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ### Subsetting
 ###
+
+# TODO
 
 
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ### Show
 ###
 
+# TODO
+
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ### Combine and split
 ###
+
+# TODO
 
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ### Subsetting
 ###
 
-
-
+# TODO
