@@ -318,7 +318,7 @@ setMethod("c",
 ### Getters
 ###
 
-# Implemented in Tuples methods and Utilities
+# Defined via inheritance to GRanges or implemented in Tuples methods
 
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ### Splitting
@@ -329,6 +329,42 @@ setMethod("c",
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ### Setters
 ###
+
+# Defined via inheritance to GRanges or implemented in Tuples methods
+
+### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+### Tuples methods
+###
+
+# TODO: Examples in GTuples-class.Rd
+#' @include AllGenerics.R
+#' @export
+setMethod("size", 
+          "GTuples", 
+          function(x) {
+            x@size
+          }
+)
+
+# TODO: Examples in GTuples-class.Rd
+#' @include AllGenerics.R
+#' @export
+setMethod("tuples", 
+          "GTuples", 
+          function(x) {
+            if (is.na(size(x))) {
+              ans <- matrix()
+            } else if (size(x) == 1L) {
+              ans <- as.matrix(start(x))
+              colnames(ans) <- paste0('pos', seq_len(size(x)))
+            } else{
+              ans <- cbind(start(x), x@internalPos, end(x))
+              colnames(ans) <- paste0('pos', seq_len(size(x)))
+            }
+            return(ans)
+          }
+)
+
 #' @export
 setReplaceMethod("tuples", 
                  "GTuples", 
@@ -364,39 +400,6 @@ setReplaceMethod("tuples",
                    update(x, ranges = ranges, internalPos = internalPos,
                           check = TRUE)
                  }
-)
-
-### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-### Tuples methods
-###
-
-# TODO: Examples in GTuples-class.Rd
-#' @include AllGenerics.R
-#' @export
-setMethod("size", 
-          "GTuples", 
-          function(x) {
-            x@size
-          }
-)
-
-# TODO: Examples in GTuples-class.Rd
-#' @include AllGenerics.R
-#' @export
-setMethod("tuples", 
-          "GTuples", 
-          function(x) {
-            if (is.na(size(x))) {
-              ans <- matrix()
-            } else if (size(x) == 1L) {
-              ans <- as.matrix(start(x))
-              colnames(ans) <- paste0('pos', seq_len(size(x)))
-            } else{
-              ans <- cbind(start(x), x@internalPos, end(x))
-              colnames(ans) <- paste0('pos', seq_len(size(x)))
-            }
-            return(ans)
-          }
 )
 
 #' @include AllGenerics.R

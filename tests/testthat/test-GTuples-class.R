@@ -8,15 +8,15 @@ context("GTuples validity methods")
 
 test_that(".valid.GTuples.pos for 1-tuples", {
   expect_that(GTuples('chr1', tuples = matrix(12:1, ncol = 1)), 
-               not(throws_error()))
+              not(throws_error()))
 })
 test_that(".valid.GTuples.pos for 2-tuples", {
-    expect_error(GTuples('chr1', tuples = matrix(12:1, ncol = 2)), 
+  expect_error(GTuples('chr1', tuples = matrix(12:1, ncol = 2)), 
                "negative widths are not allowed")
-    expect_error(GTuples('chr1', tuples = cbind(11:20, 11:20)), 
-                 "positions in each tuple must be sorted")
-    expect_error(GTuples('chr1', tuples = cbind(11:20, c(12:20, 20L))), 
-                 "positions in each tuple must be sorted")
+  expect_error(GTuples('chr1', tuples = cbind(11:20, 11:20)), 
+               "positions in each tuple must be sorted")
+  expect_error(GTuples('chr1', tuples = cbind(11:20, c(12:20, 20L))), 
+               "positions in each tuple must be sorted")
 })
 test_that(".valid.GTuples.pos for m-tuples (m > 2)", {
   expect_error(GTuples('chr1', tuples = matrix(12:1, ncol = 3)), 
@@ -121,7 +121,7 @@ test_that("GTuples constructor returns errors on bad input", {
   expect_error(GTuples('chr1', tuples = as.matrix(letters)), 
                "'tuples' must be an integer matrix")
   expect_error(GTuples('chr1', tuples = matrix(c(1, NA), ncol = 1)), 
-              "'NA' detected in 'tuples'")
+               "'NA' detected in 'tuples'")
 })
 
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -272,7 +272,8 @@ test_that("clone works", {
                                       rev(strand(gt1)), 
                                       score = mcols(gt1)$score, 
                                       seqinfo = seqinfo(gt1)))
-  gt1_clone <- GenomicRanges:::clone(gt1, elementMetadata = DataFrame(score = Rle(0L, 10)))
+  gt1_clone <- GenomicRanges:::clone(gt1, elementMetadata = 
+                                       DataFrame(score = Rle(0L, 10)))
   expect_identical(gt1_clone, GTuples(seqnames(gt1), tuples(gt1), strand(gt1),
                                       score = Rle(0L, 10), 
                                       seqinfo = seqinfo(gt1)))
