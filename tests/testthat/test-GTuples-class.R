@@ -210,54 +210,98 @@ test_that("granges works", {
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ### Updating and cloning
 ###
-
 context("GTuples updating and cloning")
 
 test_that("update works on all relevant slots", {
-  x <- gt1
-  x <- update(x, seqnames = rev(seqnames(x)))
-  expect_identical(x, GTuples(rev(seqnames(gt1)), tuples(gt1), strand(gt1),
-                              score = mcols(gt1)$score, seqinfo = seqinfo(gt1)))
-  x <- gt1
-  x <- update(x, ranges = rev(ranges(x)))
-  expect_identical(x, GTuples(seqnames(gt1), as.matrix(rev(tuples(gt1))), 
-                              strand(gt1), score = mcols(gt1)$score, 
-                              seqinfo = seqinfo(gt1)))
-  x <- gt1
-  x <- update(x, strand = rev(strand(x)))
-  expect_identical(x, GTuples(seqnames(gt1), tuples(gt1), rev(strand(gt1)),
-                              score = mcols(gt1)$score, seqinfo = seqinfo(gt1)))
-  x <- gt1
-  x <- update(x, elementMetadata = DataFrame(score = Rle(0L, 10)))
-  expect_identical(x, GTuples(seqnames(gt1), tuples(gt1), strand(gt1),
-                              score = Rle(0L, 10), seqinfo = seqinfo(gt1)))
-  x <- gt1
+  gt1_update <- update(gt1, seqnames = rev(seqnames(gt1)))
+  expect_identical(gt1_update, GTuples(rev(seqnames(gt1)), tuples(gt1), 
+                                       strand(gt1), score = mcols(gt1)$score, 
+                                       seqinfo = seqinfo(gt1)))
+  gt1_update <- update(gt1, ranges = rev(ranges(gt1)))
+  expect_identical(gt1_update, GTuples(seqnames(gt1), 
+                                       as.matrix(rev(tuples(gt1))), 
+                                       strand(gt1), score = mcols(gt1)$score, 
+                                       seqinfo = seqinfo(gt1)))
+  gt1_update <- update(gt1, strand = rev(strand(gt1)))
+  expect_identical(gt1_update, GTuples(seqnames(gt1), tuples(gt1), 
+                                       rev(strand(gt1)),
+                                       score = mcols(gt1)$score, 
+                                       seqinfo = seqinfo(gt1)))
+  gt1_update <- update(gt1, elementMetadata = DataFrame(score = Rle(0L, 10)))
+  expect_identical(gt1_update, GTuples(seqnames(gt1), tuples(gt1), strand(gt1),
+                                       score = Rle(0L, 10), 
+                                       seqinfo = seqinfo(gt1)))
   seqinfo <- Seqinfo(seqnames = c("chr1", "chr2", "chr3"), 
                      seqlengths = c(10000L, 20000L, 15000L), 
                      isCircular = c(NA, NA, NA), 
                      genome = c("mock1", "mock1", "mock1"))
-  x <- update(x, seqinfo = seqinfo)
-  expect_identical(x, GTuples(seqnames(gt1), tuples(gt1), strand(gt1),
-                              score = mcols(gt1)$score, seqinfo = seqinfo))
-  x <- gt3
-  x <- update(x, ranges = IRanges(start(x) + 10L, end(x) + 10L), 
-                                  internalPos = x@internalPos + 10L)
-  expect_identical(x, GTuples(seqnames(gt3), unname(tuples(gt3)) + 10L, 
-                              strand(gt3), score = mcols(gt3)$score, 
-                              seqinfo = seqinfo(gt3)))
-  x <- gt4
-  x <- update(x, ranges = IRanges(start(x) + 10L, end(x) + 10L), 
-              internalPos = x@internalPos + 10L)
-  expect_identical(x, GTuples(seqnames(gt4), unname(tuples(gt4)) + 10L, 
-                              strand(gt4), score = mcols(gt4)$score, 
-                              seqinfo = seqinfo(gt4)))
-  
-  
-  
+  gt1_update <- update(gt1, seqinfo = seqinfo)
+  expect_identical(gt1_update, GTuples(seqnames(gt1), tuples(gt1), strand(gt1),
+                                       score = mcols(gt1)$score, 
+                                       seqinfo = seqinfo))
+  # metadata(gt1) is not the same as setting the metadata in the GTuples() 
+  # constructor. This (somewhat confusing) behaviour is inherited from GRanges()
+  gt1_update <- update(gt1, metadata = list("foo" = "bar"))
+  gt1_metadata <- gt1
+  metadata(gt1_metadata) <- list("foo" = "bar")
+  expect_identical(gt1_update, gt1_metadata)
+  gt3_update <- update(gt3, ranges = IRanges(start(gt3) + 10L, end(gt3) + 10L), 
+                       internalPos = gt3@internalPos + 10L)
+  expect_identical(gt3_update, GTuples(seqnames(gt3), unname(tuples(gt3)) + 10L, 
+                                       strand(gt3), score = mcols(gt3)$score, 
+                                       seqinfo = seqinfo(gt3)))
+  gt4_update <- update(gt4, ranges = IRanges(start(gt4) + 10L, end(gt4) + 10L), 
+                       internalPos = gt4@internalPos + 10L)
+  expect_identical(gt4_update, GTuples(seqnames(gt4), unname(tuples(gt4)) + 10L, 
+                                       strand(gt4), score = mcols(gt4)$score, 
+                                       seqinfo = seqinfo(gt4)))
 })
 
 test_that("clone works", {
-  
+  gt1_clone <- GenomicRanges:::clone(gt1, seqnames = rev(seqnames(gt1)))
+  expect_identical(gt1_clone, GTuples(rev(seqnames(gt1)), tuples(gt1), 
+                                      strand(gt1), score = mcols(gt1)$score, 
+                                      seqinfo = seqinfo(gt1)))
+  gt1_clone <- GenomicRanges:::clone(gt1, ranges = rev(ranges(gt1)))
+  expect_identical(gt1_clone, GTuples(seqnames(gt1), 
+                                      as.matrix(rev(tuples(gt1))), strand(gt1), 
+                                      score = mcols(gt1)$score, 
+                                      seqinfo = seqinfo(gt1)))
+  gt1_clone <- GenomicRanges:::clone(gt1, strand = rev(strand(gt1)))
+  expect_identical(gt1_clone, GTuples(seqnames(gt1), tuples(gt1), 
+                                      rev(strand(gt1)), 
+                                      score = mcols(gt1)$score, 
+                                      seqinfo = seqinfo(gt1)))
+  gt1_clone <- GenomicRanges:::clone(gt1, elementMetadata = DataFrame(score = Rle(0L, 10)))
+  expect_identical(gt1_clone, GTuples(seqnames(gt1), tuples(gt1), strand(gt1),
+                                      score = Rle(0L, 10), 
+                                      seqinfo = seqinfo(gt1)))
+  seqinfo <- Seqinfo(seqnames = c("chr1", "chr2", "chr3"), 
+                     seqlengths = c(10000L, 20000L, 15000L), 
+                     isCircular = c(NA, NA, NA), 
+                     genome = c("mock1", "mock1", "mock1"))
+  gt1_clone <- GenomicRanges:::clone(gt1, seqinfo = seqinfo)
+  expect_identical(gt1_clone, GTuples(seqnames(gt1), tuples(gt1), strand(gt1),
+                                      score = mcols(gt1)$score, 
+                                      seqinfo = seqinfo))
+  # metadata(gt1) is not the same as setting the metadata in the GTuples() 
+  # constructor. This (somewhat confusing) behaviour is inherited from GRanges()
+  gt1_clone <- GenomicRanges:::clone(gt1, metadata = list("foo" = "bar"))
+  gt1_metadata <- gt1
+  metadata(gt1_metadata) <- list("foo" = "bar")
+  expect_identical(gt1_clone, gt1_metadata)
+  gt3_clone <- GenomicRanges:::clone(gt3, ranges = IRanges(start(gt3) + 10L, 
+                                                           end(gt3) + 10L), 
+                                     internalPos = gt3@internalPos + 10L)
+  expect_identical(gt3_clone, GTuples(seqnames(gt3), unname(tuples(gt3)) + 10L, 
+                                      strand(gt3), score = mcols(gt3)$score, 
+                                      seqinfo = seqinfo(gt3)))
+  gt4_clone <- GenomicRanges:::clone(gt4, ranges = IRanges(start(gt4) + 10L, 
+                                                           end(gt4) + 10L), 
+                                     internalPos = gt4@internalPos + 10L)
+  expect_identical(gt4_clone, GTuples(seqnames(gt4), unname(tuples(gt4)) + 10L, 
+                                      strand(gt4), score = mcols(gt4)$score, 
+                                      seqinfo = seqinfo(gt4)))
 })
 
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
