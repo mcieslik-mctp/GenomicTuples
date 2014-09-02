@@ -333,12 +333,26 @@ test_that("concatenation works", {
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ### Getters
 ###
+context("GTuples getters")
+
 test_that("GRanges inherited getters work", {
-    expect_identical(seqnames(gt1), gt1@seqnames)
-    expect_identical(ranges(gt2), gt2@ranges)
-    expect_identical(strand(gt3), gt3@strand)
-    expect_identical(seqinfo(gt4), gt4@seqinfo)
-    expect_identical(seqinfo(gt4), gt4@seqinfo)
+  expect_identical(length(gt0), 0L)
+  expect_identical(length(gt1), 10L)
+  expect_identical(length(gt2), 10L)
+  expect_identical(length(gt3), 10L)
+  expect_identical(length(gt4), 10L)
+  expect_identical(seqnames(gt1), gt1@seqnames)
+  expect_identical(ranges(gt2), gt2@ranges)
+  expect_identical(strand(gt3), gt3@strand)
+  expect_identical(mcols(gt3), gt3@elementMetadata)
+  expect_identical(elementMetadata(gt3), gt3@elementMetadata)
+  expect_identical(seqinfo(gt3), gt3@seqinfo)
+  expect_identical(seqlevels(gt3), seqlevels(gt3@seqinfo))
+  expect_identical(seqlengths(gt3), seqlengths(gt3@seqinfo))
+  expect_identical(isCircular(gt3), isCircular(gt3@seqinfo))
+  expect_identical(genome(gt3), genome(gt3@seqinfo))
+  expect_identical(seqlevelsStyle(gt3), seqlevelsStyle(gt3@seqinfo))
+  expect_identical(score(gt3), gt3@elementMetadata$score)
 })
 
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -361,11 +375,53 @@ test_that("inherited split works", {
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ### Setters
 ###
+context("GTuples setters")
 
+test_that("GRanges inherited getters work", {
+  gt1_ <- gt1
+  seqnames(gt1_) <- rev(seqnames(gt1))
+  expect_identical(seqnames(gt1_), rev(seqnames(gt1)))
+  gt1_ <- gt1
+  ranges(gt1_) <- rev(ranges(gt1))
+  expect_identical(ranges(gt1_), rev(ranges(gt1)))
+  gt1_ <- gt1
+  strand(gt1_) <- rev(strand(gt1))
+  expect_identical(strand(gt1_), rev(strand(gt1)))
+  gt1_ <- gt1
+  mcols(gt1_) <- DataFrame(score = rev(mcols(gt1)$score))
+  expect_identical(mcols(gt1_), DataFrame(score = rev(mcols(gt1)$score)))
+  gt1_ <- gt1
+  seqinfo(gt1_) <- Seqinfo(seqnames = c("chr1", "chr2", "chr3"), 
+                           seqlengths = c(10000L, 20000L, 15000L), 
+                           isCircular = c(NA, NA, NA), 
+                           genome = c("mock1", "mock1", "mock1"))
+  expect_identical(seqinfo(gt1_), Seqinfo(seqnames = c("chr1", "chr2", "chr3"), 
+                                          seqlengths = c(10000L, 20000L, 
+                                                         15000L), 
+                                          isCircular = c(NA, NA, NA), 
+                                          genome = c("mock1", "mock1", 
+                                                     "mock1")))
+  gt1_ <- gt1
+  seqlevels(gt1_) <- c('chrI', 'chrII', 'chrIII')
+  expect_identical(seqlevels(gt1_), c('chrI', 'chrII', 'chrIII'))
+  gt1_ <- gt1
+  seqlengths(gt1_) <- c(10000L, 20000L, 15000L)
+  expect_identical(seqlengths(gt1_), c('chr1' = 10000L, 'chr2' = 20000L, 
+                                       'chr3' = 15000L))
+  gt1_ <- gt1
+  isCircular(gt1_) <- c('chr1' = TRUE, 'chr2' = FALSE, 'chr3' = FALSE)
+  expect_identical(isCircular(gt1_), c('chr1' = TRUE, 'chr2' = FALSE, 
+                                       'chr3' = FALSE))
+  gt1_ <- gt1
+  genome(gt1_) <- 'foo'
+  expect_identical(genome(gt1_), c('chr1' = 'foo', 'chr2' = 'foo', 
+                                   'chr3' = 'foo'))
+})
+  
+  
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ### Tuples methods
 ###
-
 context("GTuples accessors")
 
 test_that("size works", {
@@ -377,11 +433,11 @@ test_that("size works", {
 })
 
 test_that("IPD works", {
-    expect_error(IPD(gt1), 
-                 "It does not make sense to compute IPD when size = 1.")
-    expect_identical(IPD(gt2), matrix(1L, nrow = 10, ncol = 1))
-    expect_identical(IPD(gt3), matrix(1L, nrow = 10, ncol = 2))
-    expect_identical(IPD(gt4), matrix(1L, nrow = 10, ncol = 3))
+  expect_error(IPD(gt1), 
+               "It does not make sense to compute IPD when size = 1.")
+  expect_identical(IPD(gt2), matrix(1L, nrow = 10, ncol = 1))
+  expect_identical(IPD(gt3), matrix(1L, nrow = 10, ncol = 2))
+  expect_identical(IPD(gt4), matrix(1L, nrow = 10, ncol = 3))
 })
 
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
