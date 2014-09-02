@@ -59,8 +59,16 @@
   
   # Different to comparing GRanges, I only allow comparison if x, y have same
   # length.
+  # shortened error message because a long error trigger line formatting
+  # that breaks the testthat error parser.
   if (length(x) != length(y)){
-    stop("Cannot compare 'GTuples' objects when 'length(x)' != 'length(y)'")
+    stop("Cannot compare 'GTuples' with different length.")
+  }
+
+  # This is where .GTuples.compare really differs from .GenomicRanges.compare
+  # NOTE: moved this up because the next 'if' will fail on NA != NA
+  if (is.na(size(x)) || is.na(size(y))) {
+    stop("Cannot compare empty GTuples.")
   }
   
   # Check 'size' is identical
@@ -80,11 +88,7 @@
   # should NEVER drop or reorder existing levels
   seqlevels(x) <- seqlevels(y) <- seqlevels
   
-  # This is where .GTuples.compare really differs from .GenomicRanges.compare
-  if (is.na(size(x))) {
-    stop("Cannot compare empty GTuples.")
-  }
-  else if (size(x) == 1L) {
+  if (size(x) == 1L) {
     val <- .compareGTuplesCpp(int_seqnames = as.integer(seqnames(x)) - 
                                 as.integer(seqnames(y)), 
                               int_strand = as.integer(strand(x)) - 
