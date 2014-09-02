@@ -355,8 +355,9 @@ setMethod("tuples",
             if (is.na(size(x))) {
               ans <- matrix()
             } else if (size(x) == 1L) {
-              ans <- as.matrix(start(x))
-              colnames(ans) <- paste0('pos', seq_len(size(x)))
+              ans <- matrix(start(x), 
+                            dimnames = list(NULL, paste0('pos', 
+                                                         seq_len(size(x)))))
             } else{
               ans <- cbind(start(x), x@internalPos, end(x))
               colnames(ans) <- paste0('pos', seq_len(size(x)))
@@ -417,7 +418,8 @@ setMethod("IPD",
               ipd <- matrix(width(x) - 1L, ncol=1)
             } else {
               ## TODO: use vectorized RCpp code, this is likely slower than vectorized R.  
-              ipd <- .IPD(start(x), as.matrix(x@internalPos), end(x))
+              ipd <- .IPD(start(x), matrix(x@internalPos, ncol = size - 2), 
+                          end(x))
             }
             return(ipd)
           }
