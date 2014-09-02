@@ -358,19 +358,18 @@ test_that("GRanges inherited getters work", {
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ### Splitting
 ###
+context("GTuples splitting")
+
 test_that("inherited split works", {
-    ## by integer
-    gt2_s = split(gt2, 1:10)
-    expect_identical(length(gt2_s), 10L)
-    expect_is(gt2_s, "GTuplesList")
-    ## by Rle
-    gt2_s = split(gt2, seqnames(gt2))
-    expect_identical(length(gt2_s), 3L)
-    expect_is(gt2_s, "GTuplesList")
+  ## by integer
+  gt2_s = split(gt2, 1:10)
+  expect_identical(length(gt2_s), 10L)
+  expect_is(gt2_s, "GTuplesList")
+  ## by Rle
+  gt2_s = split(gt2, seqnames(gt2))
+  expect_identical(length(gt2_s), 3L)
+  expect_is(gt2_s, "GTuplesList")
 })
-
-})
-
 
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ### Setters
