@@ -31,3 +31,17 @@
   
   return(val)
 }
+
+# TODO: This may not be in the latest version of S4Vectors available as a 
+# binary for Bioconductor. It is included when S4Vectors is compiled from the 
+# source. Figure out why.
+# # Define a replaceROWS function with signature NULL. Required for when slots 
+# # that are extraColumnSlots are NULL and calling the replaceROWS method for 
+# # GTuples (via inheritance to the replaceROWS method for GenomicRanges).
+# #' @export
+# setMethod("replaceROWS", 
+#           "NULL",
+#           function(x, i, value) {
+#             NULL
+#           }
+# )
