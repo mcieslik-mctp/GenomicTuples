@@ -477,8 +477,231 @@ test_that("tuples<- works", {
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ### Subsetting
 ###
+context("GTuples subsetting")
 
-# TODO
+test_that("extractROWS works", {
+  expect_identical(extractROWS(gt1, 1), 
+                   GTuples('chr1', matrix(1L), strand = '-', score = 1L, 
+                           seqinfo = seqinfo(gt1)))
+  expect_identical(extractROWS(gt1, 1:2), 
+                   GTuples(c('chr1', 'chr2'), matrix(1:2), strand = c('-', '+'), 
+                           score = 1:2, seqinfo = seqinfo(gt2)))
+  expect_identical(extractROWS(gt2, 1), 
+                   GTuples('chr1', matrix(1:2, ncol = 2), strand = '-', 
+                           score = 1L, seqinfo = seqinfo(gt1)))
+  expect_identical(extractROWS(gt2, 1:2), 
+                   GTuples(c('chr1', 'chr2'), matrix(c(1:2, 2:3), ncol = 2), 
+                           strand = c('-', '+'), score = 1:2, 
+                           seqinfo = seqinfo(gt2)))
+  expect_identical(extractROWS(gt3, 1), 
+                   GTuples('chr1', matrix(1:3, ncol = 3), strand = '-', 
+                           score = 1L, seqinfo = seqinfo(gt3)))
+  expect_identical(extractROWS(gt3, 1:2), 
+                   GTuples(c('chr1', 'chr2'), matrix(c(1:2, 2:3, 3:4), 
+                                                     ncol = 3), 
+                           strand = c('-', '+'), score = 1:2, 
+                           seqinfo = seqinfo(gt2)))
+  expect_identical(extractROWS(gt4, 1), 
+                   GTuples('chr1', matrix(1:4, ncol = 4), strand = '-', 
+                           score = 1L, seqinfo = seqinfo(gt4)))
+  expect_identical(extractROWS(gt4, 1:2), 
+                   GTuples(c('chr1', 'chr2'), matrix(c(1:2, 2:3, 3:4, 4:5), 
+                                                     ncol = 4), 
+                           strand = c('-', '+'), score = 1:2, 
+                           seqinfo = seqinfo(gt4)))
+})
+
+test_that("[ works", {
+  expect_identical(gt1[1], 
+                   GTuples('chr1', matrix(1L), strand = '-', score = 1L,
+                           seqinfo = seqinfo(gt1)))
+  expect_identical(gt1[1:2], 
+                   GTuples(c('chr1', 'chr2'), matrix(1:2), strand = c('-', '+'), 
+                           score = 1:2, seqinfo = seqinfo(gt2)))
+  expect_identical(gt2[1], 
+                   GTuples('chr1', matrix(1:2, ncol = 2), strand = '-', 
+                           score = 1L, seqinfo = seqinfo(gt1)))
+  expect_identical(gt2[1:2], 
+                   GTuples(c('chr1', 'chr2'), 
+                           matrix(c(1:2, 2:3), ncol = 2), strand = c('-', '+'), 
+                           score = 1:2, seqinfo = seqinfo(gt2)))
+  expect_identical(gt3[1], 
+                   GTuples('chr1', matrix(1:3, ncol = 3), strand = '-', 
+                           score = 1L, seqinfo = seqinfo(gt3)))
+  expect_identical(gt3[1:2], 
+                   GTuples(c('chr1', 'chr2'), 
+                           matrix(c(1:2, 2:3, 3:4), ncol = 3), 
+                           strand = c('-', '+'), score = 1:2, 
+                           seqinfo = seqinfo(gt2)))
+  expect_identical(gt4[1], 
+                   GTuples('chr1', matrix(1:4, ncol = 4), strand = '-', 
+                           score = 1L, seqinfo = seqinfo(gt4)))
+  expect_identical(gt4[1:2], 
+                   GTuples(c('chr1', 'chr2'), 
+                           matrix(c(1:2, 2:3, 3:4, 4:5), ncol = 4), 
+                           strand = c('-', '+'), 
+                           score = 1:2, seqinfo = seqinfo(gt4)))
+})
+
+test_that("replaceROWS works", {
+  gt1_ <- replaceROWS(gt1, 1, GTuples('chr3', matrix(20L), score = 20L, 
+                                      seqinfo = seqinfo(gt1)))
+  expect_identical(gt1_, GTuples(c('chr3', as.vector(seqnames(gt1)[2:10])), 
+                                 matrix(c(20L, 2:10)), 
+                                 strand = c('*', as.vector(strand(gt1)[2:10])), 
+                                 score = c(20L, 2:10), 
+                                 seqinfo = seqinfo(gt1)))
+  gt1_ <- replaceROWS(gt1, 1:2, GTuples('chr3', matrix(20:21), score = 20:21, 
+                                        seqinfo = seqinfo(gt1)))
+  expect_identical(gt1_, GTuples(c(rep('chr3', 2), 
+                                   as.vector(seqnames(gt1)[3:10])), 
+                                 matrix(c(20:21, 3:10)), 
+                                 strand = c(rep('*', 2), 
+                                            as.vector(strand(gt1)[3:10])), 
+                                 score = c(20:21, 3:10), 
+                                 seqinfo = seqinfo(gt1)))
+  gt2_ <- replaceROWS(gt2, 1, GTuples('chr3', matrix(20:21, ncol = 2), 
+                                      score = 20L, seqinfo = seqinfo(gt2)))
+  expect_identical(gt2_, GTuples(c('chr3', as.vector(seqnames(gt2)[2:10])), 
+                                 rbind(20:21, unname(tuples(gt2)[2:10,])), 
+                                 strand = c('*', as.vector(strand(gt2)[2:10])), 
+                                 score = c(20L, 2:10), 
+                                 seqinfo = seqinfo(gt2)))
+  gt2_ <- replaceROWS(gt2, 1:2, GTuples('chr3', matrix(c(20:21, 21:22), 
+                                                       ncol = 2), 
+                                        score = 20:21, seqinfo = seqinfo(gt2)))
+  expect_identical(gt2_, GTuples(c(rep('chr3', 2), 
+                                   as.vector(seqnames(gt2)[3:10])), 
+                                 rbind(matrix(c(20:21, 21:22), ncol = 2), 
+                                       unname(tuples(gt2)[3:10,])), 
+                                 strand = c(rep('*', 2), 
+                                            as.vector(strand(gt2)[3:10])), 
+                                 score = c(20:21, 3:10), 
+                                 seqinfo = seqinfo(gt2)))
+  gt3_ <- replaceROWS(gt3, 1, GTuples('chr3', matrix(20:22, ncol = 3), 
+                                      score = 20L, seqinfo = seqinfo(gt3)))
+  expect_identical(gt3_, GTuples(c('chr3', as.vector(seqnames(gt3)[2:10])), 
+                                 rbind(20:22, unname(tuples(gt3)[2:10,])), 
+                                 strand = c('*', as.vector(strand(gt3)[2:10])), 
+                                 score = c(20L, 2:10), 
+                                 seqinfo = seqinfo(gt3)))
+  gt3_ <- replaceROWS(gt3, 1:2, GTuples('chr3', matrix(c(20:21, 21:22, 22:23), 
+                                                       ncol = 3), 
+                                        score = 20:21, seqinfo = seqinfo(gt3)))
+  expect_identical(gt3_, GTuples(c(rep('chr3', 2), 
+                                   as.vector(seqnames(gt3)[3:10])), 
+                                 rbind(matrix(c(20:21, 21:22, 22:23), 
+                                              ncol = 3),
+                                       unname(tuples(gt3)[3:10,])), 
+                                 strand = c(rep('*', 2), 
+                                            as.vector(strand(gt3)[3:10])), 
+                                 score = c(20:21, 3:10), 
+                                 seqinfo = seqinfo(gt3)))
+  gt4_ <- replaceROWS(gt4, 1, GTuples('chr3', matrix(20:23, ncol = 4), 
+                                      score = 20L, seqinfo = seqinfo(gt4)))
+  expect_identical(gt4_, GTuples(c('chr3', as.vector(seqnames(gt4)[2:10])), 
+                                 rbind(20:23, unname(tuples(gt4)[2:10,])), 
+                                 strand = c('*', as.vector(strand(gt4)[2:10])), 
+                                 score = c(20L, 2:10), 
+                                 seqinfo = seqinfo(gt4)))
+  gt4_ <- replaceROWS(gt4, 1:2, GTuples('chr3', 
+                                        matrix(c(20:21, 21:22, 22:23, 23:24), 
+                                               ncol = 4), 
+                                        score = 20:21, seqinfo = seqinfo(gt4)))
+  expect_identical(gt4_, GTuples(c(rep('chr3', 2), 
+                                   as.vector(seqnames(gt4)[3:10])), 
+                                 rbind(matrix(c(20:21, 21:22, 22:23, 23:24), 
+                                              ncol = 4),
+                                       unname(tuples(gt4)[3:10,])), 
+                                 strand = c(rep('*', 2), 
+                                            as.vector(strand(gt4)[3:10])), 
+                                 score = c(20:21, 3:10), 
+                                 seqinfo = seqinfo(gt4)))
+})
+
+test_that("[<- works", {
+  gt1_ <- gt1
+  gt1_[1] <- GTuples('chr3', matrix(20L), score = 20L, seqinfo = seqinfo(gt1))
+  expect_identical(gt1_, GTuples(c('chr3', as.vector(seqnames(gt1)[2:10])), 
+                                 matrix(c(20L, 2:10)), 
+                                 strand = c('*', as.vector(strand(gt1)[2:10])), 
+                                 score = c(20L, 2:10), 
+                                 seqinfo = seqinfo(gt1)))
+  
+  gt1_ <- gt1
+  gt1_[1:2] <- GTuples('chr3', matrix(20:21), score = 20:21,
+                       seqinfo = seqinfo(gt1))
+  expect_identical(gt1_, GTuples(c(rep('chr3', 2), 
+                                   as.vector(seqnames(gt1)[3:10])), 
+                                 matrix(c(20:21, 3:10)), 
+                                 strand = c(rep('*', 2), 
+                                            as.vector(strand(gt1)[3:10])), 
+                                 score = c(20:21, 3:10), 
+                                 seqinfo = seqinfo(gt1)))
+  
+  gt2_ <- gt2
+  gt2_[1] <- GTuples('chr3', matrix(20:21, ncol = 2), score = 20L, 
+                     seqinfo = seqinfo(gt2))
+  expect_identical(gt2_, GTuples(c('chr3', as.vector(seqnames(gt2)[2:10])), 
+                                 rbind(20:21, unname(tuples(gt2)[2:10,])), 
+                                 strand = c('*', as.vector(strand(gt2)[2:10])), 
+                                 score = c(20L, 2:10), 
+                                 seqinfo = seqinfo(gt2)))
+  gt2_ <- gt2
+  gt2_[1:2] <- GTuples('chr3', matrix(c(20:21, 21:22), ncol = 2), 
+                       score = 20:21, seqinfo = seqinfo(gt2))
+  expect_identical(gt2_, GTuples(c(rep('chr3', 2), 
+                                   as.vector(seqnames(gt2)[3:10])), 
+                                 rbind(matrix(c(20:21, 21:22), ncol = 2), 
+                                       unname(tuples(gt2)[3:10,])), 
+                                 strand = c(rep('*', 2), 
+                                            as.vector(strand(gt2)[3:10])), 
+                                 score = c(20:21, 3:10), 
+                                 seqinfo = seqinfo(gt2)))
+  gt3_ <- gt3
+  gt3_[1] <- GTuples('chr3', matrix(20:22, ncol = 3), score = 20L, 
+                     seqinfo = seqinfo(gt3))
+  expect_identical(gt3_, GTuples(c('chr3', as.vector(seqnames(gt3)[2:10])), 
+                                 rbind(20:22, unname(tuples(gt3)[2:10,])), 
+                                 strand = c('*', as.vector(strand(gt3)[2:10])), 
+                                 score = c(20L, 2:10), 
+                                 seqinfo = seqinfo(gt3)))
+  gt3_ <- gt3
+  gt3_[1:2] <- GTuples('chr3', matrix(c(20:21, 21:22, 22:23), ncol = 3), 
+                       score = 20:21, seqinfo = seqinfo(gt3))
+  expect_identical(gt3_, GTuples(c(rep('chr3', 2), 
+                                   as.vector(seqnames(gt3)[3:10])), 
+                                 rbind(matrix(c(20:21, 21:22, 22:23), 
+                                              ncol = 3),
+                                       unname(tuples(gt3)[3:10,])), 
+                                 strand = c(rep('*', 2), 
+                                            as.vector(strand(gt3)[3:10])), 
+                                 score = c(20:21, 3:10), 
+                                 seqinfo = seqinfo(gt3)))
+  gt4_ <- gt4
+  gt4_[1] <- GTuples('chr3', matrix(20:23, ncol = 4), score = 20L, 
+                     seqinfo = seqinfo(gt4))
+  expect_identical(gt4_, GTuples(c('chr3', as.vector(seqnames(gt4)[2:10])), 
+                                 rbind(20:23, unname(tuples(gt4)[2:10,])), 
+                                 strand = c('*', as.vector(strand(gt4)[2:10])), 
+                                 score = c(20L, 2:10), 
+                                 seqinfo = seqinfo(gt4)))
+  gt4_[1:2] <- GTuples('chr3', matrix(c(20:21, 21:22, 22:23, 23:24), ncol = 4), 
+                       score = 20:21, seqinfo = seqinfo(gt4))
+  expect_identical(gt4_, GTuples(c(rep('chr3', 2), 
+                                   as.vector(seqnames(gt4)[3:10])), 
+                                 rbind(matrix(c(20:21, 21:22, 22:23, 23:24), 
+                                              ncol = 4),
+                                       unname(tuples(gt4)[3:10,])), 
+                                 strand = c(rep('*', 2), 
+                                            as.vector(strand(gt4)[3:10])), 
+                                 score = c(20:21, 3:10), 
+                                 seqinfo = seqinfo(gt4)))
+  
+  
+  
+})
+
 
 
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
