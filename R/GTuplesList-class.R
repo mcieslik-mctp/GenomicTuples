@@ -76,7 +76,7 @@ GTuplesList <- function(...) {
 }
 
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-### Accessors.
+### Tuples methods
 ###
 
 #' @include AllGenerics.R
@@ -111,18 +111,6 @@ setReplaceMethod("tuples",
                  }
 )
 
-
-### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-### Coercion.
-###
-
-# as.data.frame and as.list work via inheritance to GRangesList
-# TODO: grglist when method is implemented in GenomicRanges
-
-### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-### Utilities.
-###
-
 #' @include AllGenerics.R
 #' @export
 setMethod("IPD", 
@@ -132,6 +120,13 @@ setMethod("IPD",
             relist(IPD(unlisted_x), x)
           }
 )
+
+### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+### Coercion.
+###
+
+# as.data.frame and as.list work via inheritance to GRangesList
+# TODO: grglist when method is implemented in GenomicRanges
 
 # stack defined via inheritance to GRangesList
 

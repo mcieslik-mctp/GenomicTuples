@@ -91,15 +91,15 @@ test_that("GTuples constructor returns a valid GTuples object when m = 0", {
   expect_true(validObject(gt0))
 })
 
-test_that("GTuples constructor returns a GTuples object when m = 1", {
+test_that("GTuples constructor returns a valid object when m = 1", {
   expect_true(validObject(gt1))
 })
 
-test_that("GTuples constructor returns a GTuples object when m = 2", {
-  expect_true(validObject(gt4))
+test_that("GTuples constructor returns a valid object when m = 2", {
+  expect_true(validObject(gt2))
 })
 
-test_that("GTuples constructor returns a GTuples object when m >= 3", {
+test_that("GTuples constructor returns a valid object when m >= 3", {
   expect_true(validObject(gt3))
   expect_true(validObject(gt4))
 })
