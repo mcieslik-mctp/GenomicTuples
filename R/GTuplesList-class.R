@@ -75,23 +75,6 @@ GTuplesList <- function(...) {
   relist(unlistData, PartitioningByEnd(listData))
 }
 
-# TODO: Test
-#' @export
-setMethod("updateObject", 
-          "GTuplesList", 
-          function(object, ..., verbose = FALSE) { 
-            if (verbose) {
-              message("updateObject(object = 'GTuplesList')")
-            }
-            if (is(try(validObject(object@unlistData, complete = TRUE), 
-                       silent=TRUE), "try-error")) {
-              object@unlistData <- updateObject(object@unlistData)
-              return(object)
-            }
-            object
-          }
-)
-
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ### Accessors.
 ###

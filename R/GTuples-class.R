@@ -149,37 +149,6 @@ GTuples <- function(seqnames = Rle(), tuples = matrix(),
   new("GTuples", gr, internalPos = internalPos, size = size)
 }
 
-# TODO: Test
-#' @export
-setMethod("updateObject", 
-          "GTuples", 
-          function(object, ..., verbose=FALSE) { 
-            if (verbose) {
-              message("updateObject(object = 'GTuples')")
-            }
-            if (is(try(object@seqinfo, silent = TRUE), "try-error")) {
-              object <- new(class(object),
-                            seqnames = object@seqnames,
-                            ranges = object@ranges,
-                            strand = object@strand,
-                            elementMetadata = object@elementMetadata,
-                            metadata = object@metadata,
-                            seqinfo = Seqinfo(seqnames = 
-                                                names(object@seqlengths),
-                                              seqlengths = object@seqlengths),
-                            size = object@size,
-                            internalPos = object@internalPos)
-              return(object)
-            }
-            if (is(try(validObject(object@seqinfo, complete = TRUE), 
-                       silent=TRUE), "try-error")) {
-              object@seqinfo <- updateObject(object@seqinfo)
-              return(object)
-            }
-            object
-          }
-)
-
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ### Coercion
 ###
