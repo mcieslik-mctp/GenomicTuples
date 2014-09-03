@@ -31,7 +31,12 @@ setMethod("shift",
           "GTuples",
           function(x, shift = 0L, use.names = TRUE) {
             new_ranges <- shift(ranges(x), shift = shift, use.names = use.names)
-            new_internalPos <- x@internalPos + shift
+            if (!is.null(x@internalPos)) {
+                # NULL + shift is not NULL
+                new_internalPos <- x@internalPos + shift
+            } else {
+                new_internalPos <- x@internalPos
+            }
             GenomicRanges:::clone(x, ranges = new_ranges, 
                                   internalPos = new_internalPos) 
           }
@@ -50,7 +55,9 @@ setMethod("shift",
             }
             ranges(x@unlistData) <-
               shift(x@unlistData@ranges, shift, use.names = use.names)
-            x@unlistData@internalPos <- x@unlistData@internalPos + shift
+            if (!is.null(x@unlistData@internalPos)) {
+                x@unlistData@internalPos <- x@unlistData@internalPos + shift
+            }
             x
           }
 )
