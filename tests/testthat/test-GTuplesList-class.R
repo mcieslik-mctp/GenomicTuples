@@ -316,6 +316,25 @@ test_that("[[<- works", {
   expect_identical(gtl4, GTuplesList(A = gt4, B = gt4[6:10]))
 })
 
+### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+### Deconstruction/reconstruction of a GTuplesList into/from a GTuples
+### object.
+###
+### For internal use only (not exported).
+###
+context("Desconstruction/reconstruction of GTuplesList")
+test_that("Returns identical", {
+  expect_identical(GenomicRanges:::reconstructGRLfromGR(
+    GenomicRanges:::deconstructGRLintoGR(gtl0), gtl0), gtl0)
+  expect_identical(GenomicRanges:::reconstructGRLfromGR(
+    GenomicRanges:::deconstructGRLintoGR(gtl1), gtl1), gtl1)
+  expect_identical(GenomicRanges:::reconstructGRLfromGR(
+    GenomicRanges:::deconstructGRLintoGR(gtl2), gtl2), gtl2)
+  expect_identical(GenomicRanges:::reconstructGRLfromGR(
+    GenomicRanges:::deconstructGRLintoGR(gtl3), gtl3), gtl3)
+  expect_identical(GenomicRanges:::reconstructGRLfromGR(
+    GenomicRanges:::deconstructGRLintoGR(gtl4), gtl4), gtl4)
+})
 
 
 
