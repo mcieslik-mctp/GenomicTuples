@@ -92,10 +92,14 @@ setMethod("size",
 setMethod("tuples",
           "GTuplesList",
           function(x) {
-            unlisted_x <- unlist(x, use.names = FALSE)
-            unlisted_ans <- tuples(unlisted_x)
-            ans <- relist(unlisted_ans, x)
-            ans
+            if (is.na(size(x))) {
+              List(lapply(x, function(x){matrix()}))
+            } else{
+              unlisted_x <- unlist(x, use.names = FALSE)
+              unlisted_ans <- tuples(unlisted_x)
+              ans <- relist(unlisted_ans, x)
+              ans
+            }
           }
 )
 
