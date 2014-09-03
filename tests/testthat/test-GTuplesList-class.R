@@ -336,7 +336,23 @@ test_that("Returns identical", {
     GenomicRanges:::deconstructGRLintoGR(gtl4), gtl4), gtl4)
 })
 
+### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+### show method.
+###
 
+# TODO: Not sure how to test this (or whether it's really necessary)
+
+### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+### Going from GRanges to GRangesList with extractList() and family.
+###
+context("GTuplesList relistToClass")
+
+test_that("relistToClass works", {
+  expect_identical(relistToClass(gt0), "GTuplesList")
+  expect_identical(relistToClass(gt1), "GTuplesList")
+  expect_identical(relistToClass(gtl0), "SimpleList")
+  expect_identical(relistToClass(gtl1), "SimpleList")
+})
 
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ### apply methods
