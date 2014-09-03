@@ -132,40 +132,36 @@ context("GTuples coercion")
 test_that("as.data.frame works", {
   expect_error(as.data.frame(gt0), "arguments imply differing number of rows")
   expect_identical(as.data.frame(gt1), 
-                   data.frame(seqnames = factor(as.character(seqnames(gt1))),
+                   data.frame(seqnames = as.factor(seqnames(gt1)),
                               pos1 = start(gt1),
-                              strand = factor(as.character(strand(gt1)), 
-                                              levels = c('+', '-', '*')),
+                              strand = as.factor(strand(gt1)),
                               score = mcols(gt1)$score
                    )
   )
   expect_identical(as.data.frame(gt2), 
-                   data.frame(seqnames = factor(as.character(seqnames(gt4))),
+                   data.frame(seqnames = as.factor(seqnames(gt4)),
                               pos1 = start(gt1),
                               pos2 = end(gt2),
-                              strand = factor(as.character(strand(gt2)), 
-                                              levels = c('+', '-', '*')),
+                              strand = as.factor(strand(gt2)),
                               score = mcols(gt2)$score
                    )
   )
   expect_identical(as.data.frame(gt3), 
-                   data.frame(seqnames = factor(as.character(seqnames(gt3))),
+                   data.frame(seqnames = as.factor(seqnames(gt3)),
                               pos1 = start(gt3),
                               pos2 = gt3@internalPos,
                               pos3 = end(gt3),
-                              strand = factor(as.character(strand(gt3)), 
-                                              levels = c('+', '-', '*')),
+                              strand = as.factor(strand(gt3)),
                               score = mcols(gt1)$score
                    )
   )
   expect_identical(as.data.frame(gt4), 
-                   data.frame(seqnames = factor(as.character(seqnames(gt4))),
+                   data.frame(seqnames = as.factor(seqnames(gt4)),
                               pos1 = start(gt4),
                               pos2 = gt4@internalPos[, 1],
                               pos3 = gt4@internalPos[, 2],
                               pos4 = end(gt4),
-                              strand = factor(as.character(strand(gt4)), 
-                                              levels = c('+', '-', '*')),
+                              strand = as.factor(strand(gt4)),
                               score = mcols(gt4)$score
                    )
   )
