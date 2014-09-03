@@ -2,9 +2,9 @@
 # tests/testthat/helper-make-test-data.R
 
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-### Validity
+### findOverlaps
 ###
-context("findOverlaps methods")
+context("GTuples findOverlaps method")
 
 test_that("GTuples,GTuples overlaps", {
     ## empty
@@ -41,3 +41,4 @@ test_that("GTuples,GTuples overlaps", {
     expect_equal(hits@subjectHits, c(1,2,1,2))
     
 })
+
