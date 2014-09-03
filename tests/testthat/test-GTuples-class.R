@@ -124,7 +124,7 @@ test_that("GTuples constructor returns errors on bad input", {
 context("GTuples coercion")
 
 test_that("as.data.frame works", {
-  expect_error(as.data.frame(gt0), "arguments imply differing number of rows")
+  expect_identical(as.data.frame(gt0), data.frame())
   expect_identical(as.data.frame(gt1), 
                    data.frame(seqnames = as.factor(seqnames(gt1)),
                               pos1 = start(gt1),

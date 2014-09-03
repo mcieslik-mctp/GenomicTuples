@@ -156,30 +156,34 @@ GTuples <- function(seqnames = Rle(), tuples = matrix(),
 setMethod("as.data.frame", 
           "GTuples", 
           function(x, row.names = NULL, optional = FALSE, ...) {
-            tuples <- tuples(x)
-            if (missing(row.names)) {
-              row.names <- names(x)
+            if (is.na(size(x))) {
+              data.frame()
+            } else {
+              tuples <- tuples(x)
+              if (missing(row.names)) {
+                row.names <- names(x)
+              }
+              if (!is.null(names(x))) {
+                names(x) <- NULL
+              }
+              mcols_df <- as.data.frame(mcols(x), ...)
+              extraColumnNames <- GenomicRanges:::extraColumnSlotNames(x)
+              extraColumnNames <- extraColumnNames[extraColumnNames != 
+                                                     'internalPos']
+              if (length(extraColumnNames) > 0L) {
+                extraColumns <- GenomicRanges:::extraColumnSlotsAsDF(x)
+                # Remove the internalPos slot from extraColumns to prevent it 
+                # being twice-included.
+                extraColumns <- extraColumns[colnames(extraColumns) != 
+                                               'internalPos']
+                mcols_df <- cbind(as.data.frame(extraColumns, ...), 
+                                  mcols_df)
+              }
+              data.frame(seqnames = as.factor(seqnames(x)), 
+                         as.data.frame(tuples), strand = as.factor(strand(x)), 
+                         mcols_df, row.names = row.names, 
+                         stringsAsFactors = FALSE)
             }
-            if (!is.null(names(x))) {
-              names(x) <- NULL
-            }
-            mcols_df <- as.data.frame(mcols(x), ...)
-            extraColumnNames <- GenomicRanges:::extraColumnSlotNames(x)
-            extraColumnNames <- extraColumnNames[extraColumnNames != 
-                                                   'internalPos']
-            if (length(extraColumnNames) > 0L) {
-              extraColumns <- GenomicRanges:::extraColumnSlotsAsDF(x)
-              # Remove the internalPos slot from extraColumns to prevent it 
-              # being twice-included.
-              extraColumns <- extraColumns[colnames(extraColumns) != 
-                                             'internalPos']
-              mcols_df <- cbind(as.data.frame(extraColumns, ...), 
-                                mcols_df)
-            }
-            data.frame(seqnames = as.factor(seqnames(x)), 
-                       as.data.frame(tuples), strand = as.factor(strand(x)), 
-                       mcols_df, row.names = row.names, 
-                       stringsAsFactors = FALSE)
           }
 )
 
