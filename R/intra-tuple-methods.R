@@ -66,8 +66,32 @@ setMethod("shift",
 ### narrow()
 ###
 ### Method for GTuples defined via inheritance to GRanges
+### 
 
-# TODO: Should I explicitly define this via callNextMethod()?
+## TODO: Should I explicitly define this via callNextMethod()?
+## For now I think narrow should be disabled until we have a
+## better solution for zero-width GTuples/GRanges
+
+#' @export
+setMethod("narrow", 
+          "GTuples", 
+          function(x, start=NA, end=NA, width=NA, use.names=TRUE) {
+            stop(paste0(class(x), " do not currently support the 'flank' ", 
+                        "method."))
+          }
+)
+
+#' @export
+setMethod("narrow", 
+          "GTuplesList", 
+          function(x, start=NA, end=NA, width=NA, use.names=TRUE) {
+            stop(paste0(class(x), " do not currently support the 'flank' ", 
+                        "method."))
+          }
+)
+
+
+
 
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ### flank()

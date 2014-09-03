@@ -6,7 +6,7 @@
 ###
 context("GTuples intra-tuple methods")
 
-test_that("GTuples shitf", {
+test_that("GTuples shift", {
     expect_equal(shift(gt0), gt0)
     expect_equal(shift(gt0, 2), gt0)
     expect_equal(shift(gt1), gt1)
@@ -20,7 +20,7 @@ test_that("GTuples shitf", {
 
 })
 
-test_that("GTuplesList shitf", {
+test_that("GTuplesList shift", {
     expect_equal(shift(gtl0), gtl0)
     expect_equal(shift(gtl0, 2), gtl0)
     expect_equal(shift(gtl1), gtl1)
@@ -31,6 +31,16 @@ test_that("GTuplesList shitf", {
     ## is the internal field updated?
     expect_equal(gtl3@unlistData@internalPos + 2, shift(gtl3, 2)@unlistData@internalPos)
     expect_equal(gtl4@unlistData@internalPos + 2, shift(gtl4, 2)@unlistData@internalPos)
-    
 })
 
+test_that("GTuples narrow", {
+    ## GRanges can be narrowed down to zero-width
+    expect_true(all(width(narrow(granges(gt2), 3)) == 0))
+    ## if the narrow method is inherited from GRanges the following will
+    ## violate GTuples constraints pos1 < pos0
+    expect_error(narrow(gt2, 3), "GTuples do not currently support the 'flank' method.")
+})
+
+test_that("GTuplesList narrow", {
+    expect_error(narrow(gtl2, 3), "GTuplesList do not currently support the 'flank' method.")
+})
