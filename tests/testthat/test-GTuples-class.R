@@ -6,11 +6,11 @@
 ###
 context("GTuples validity methods")
 
-test_that(".valid.GTuples.pos for 1-tuples", {
+test_that(".valid.GTuples.pos works for 1-tuples", {
   expect_that(GTuples('chr1', tuples = matrix(12:1, ncol = 1)), 
               not(throws_error()))
 })
-test_that(".valid.GTuples.pos for 2-tuples", {
+test_that(".valid.GTuples.pos works for 2-tuples", {
   expect_error(GTuples('chr1', tuples = matrix(12:1, ncol = 2)), 
                "negative widths are not allowed")
   expect_error(GTuples('chr1', tuples = cbind(11:20, 11:20)), 
@@ -18,7 +18,7 @@ test_that(".valid.GTuples.pos for 2-tuples", {
   expect_error(GTuples('chr1', tuples = cbind(11:20, c(12:20, 20L))), 
                "positions in each tuple must be sorted")
 })
-test_that(".valid.GTuples.pos for m-tuples (m > 2)", {
+test_that(".valid.GTuples.pos works for m-tuples (m > 2)", {
   expect_error(GTuples('chr1', tuples = matrix(12:1, ncol = 3)), 
                "negative widths are not allowed")
   expect_error(GTuples('chr1', tuples = cbind(11:20, 1:10, 31:40)), 
@@ -36,12 +36,7 @@ test_that(".valid.GTuples.pos for m-tuples (m > 2)", {
                "positions in each tuple must be sorted")
 })
 
-test_that(".valid.GTuples.mcols", {
-  c("seqnames", "ranges", "strand",
-    "seqlevels", "seqlengths", "isCircular",
-    #"genome",
-    "start", "end", "width", "element",
-    "tuples", "internalPos", "size")
+test_that(".valid.GTuples.mcols works", {
   expect_error(GTuples(seqnames = 'chr1', tuples = matrix(1:10), strand = '+',
                        seqnames = letters[1:10]), 
                "formal argument \"seqnames\" matched by multiple")
@@ -85,7 +80,6 @@ test_that(".valid.GTuples.mcols", {
                        size = letters[1:10]), 
                "names of metadata columns cannot be one of")
 })
-
 
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ### Constructor
@@ -413,7 +407,6 @@ test_that("GRanges inherited getters work", {
                                    'chr3' = 'foo'))
 })
 
-
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ### Tuples methods
 ###
@@ -698,22 +691,8 @@ test_that("[<- works", {
   
 })
 
-
-
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ### Show
 ###
 
-# TODO
-
-### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-### Combine and split
-###
-
-# TODO
-
-### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-### Subsetting
-###
-
-# TODO
+# TODO: Not sure how to test this (or whether it's really necessary)
